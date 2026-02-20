@@ -1,9 +1,12 @@
 'use client';
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 
 export default function LoginButton() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const handleLogin = async () => {
     await supabase.auth.signInWithOAuth({
@@ -15,7 +18,7 @@ export default function LoginButton() {
   };
 
   return (
-    <button 
+    <button
       onClick={handleLogin}
       className="bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-gray-200 transition-colors flex items-center gap-2"
     >

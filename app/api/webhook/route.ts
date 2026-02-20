@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Webhook error: ${err.message}` }, { status: 400 });
   }
 
-  const data = event.data.object as any;
+  const data = event.data.object as any; // 'any' löser typkonflikten med Stripe SDK v20
 
   try {
     if (event.type === 'checkout.session.completed') {
@@ -25,8 +25,8 @@ export async function POST(req: Request) {
       // Get subscription details for period end
       let periodEnd: number | null = null;
       if (subscriptionId) {
-        const sub = await stripe.subscriptions.retrieve(subscriptionId);
-        periodEnd = sub.current_period_end;
+        const sub = await stripe.subscriptions.retrieve(subscriptionId) as any;
+        periodEnd = sub.current_period_end ?? null;
       }
 
       await supabaseAdmin

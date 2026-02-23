@@ -61,7 +61,7 @@ export default function PrivacyPage() {
           },
           {
             title: '11. Contact',
-            content: `If you have questions about this privacy policy, please contact us at support@tabmonitor.com.`,
+            content: `If you have questions about this privacy policy, please contact us at eaconsulting.supp@gmail.com.`,
           },
         ].map(({ title, content }) => (
           <section key={title} style={{ marginBottom: 40, paddingBottom: 40, borderBottom: '1px solid #1e2836' }}>

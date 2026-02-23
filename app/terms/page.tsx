@@ -65,7 +65,7 @@ export default function TermsPage() {
           },
           {
             title: '12. Contact',
-            content: `For questions about these terms, contact us at support@tabmonitor.com.`,
+            content: `For questions about these terms, contact us at eaconsulting.supp@gmail.com.`,
           },
         ].map(({ title, content }) => (
           <section key={title} style={{ marginBottom: 40, paddingBottom: 40, borderBottom: '1px solid #1e2836' }}>

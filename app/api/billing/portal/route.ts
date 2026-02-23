@@ -1,3 +1,7 @@
+// app/api/billing/portal/route.ts
+// Fix: Payment Link users have stripe_customer_id = NULL in Supabase.
+// Fall back to looking up customer by email in Stripe directly.
+
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
@@ -12,18 +16,50 @@ export async function POST(req: Request) {
     const cleanEmail = email.trim().toLowerCase();
     const origin = new URL(req.url).origin;
 
-    const { data: license, error } = await supabaseAdmin
+    // 1. Look up license row
+    const { data: license } = await supabaseAdmin
       .from('licenses')
       .select('stripe_customer_id')
       .eq('email', cleanEmail)
       .single();
 
-    if (error || !license?.stripe_customer_id) {
-      return NextResponse.json({ error: 'No billing account found for this email' }, { status: 404 });
+    let customerId = license?.stripe_customer_id || null;
+
+    // 2. If no customer ID stored (Payment Link flow), search Stripe by email
+    if (!customerId) {
+      const customers = await stripe.customers.list({ email: cleanEmail, limit: 5 });
+      // Pick the customer with an active subscription if multiple exist
+      for (const c of customers.data) {
+        const subs = await stripe.subscriptions.list({ customer: c.id, status: 'all', limit: 1 });
+        if (subs.data.length > 0) {
+          customerId = c.id;
+          // Backfill stripe_customer_id so future lookups are instant
+          await supabaseAdmin
+            .from('licenses')
+            .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
+            .eq('email', cleanEmail);
+          break;
+        }
+      }
+      // If still nothing, just use first customer found
+      if (!customerId && customers.data.length > 0) {
+        customerId = customers.data[0].id;
+        await supabaseAdmin
+          .from('licenses')
+          .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
+          .eq('email', cleanEmail);
+      }
+    }
+
+    if (!customerId) {
+      return NextResponse.json(
+        { error: 'No Stripe account found for this email. Have you subscribed yet?' },
+        { status: 404 }
+      );
     }
 
     const session = await stripe.billingPortal.sessions.create({
-      customer: license.stripe_customer_id,
+      customer: customerId,
       return_url: `${origin}/`,
     });
 

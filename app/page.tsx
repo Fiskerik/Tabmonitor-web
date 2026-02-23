@@ -810,7 +810,7 @@ export default function LandingPage() {
           <ul className="footer-links">
             <li><a href="/privacy">Privacy</a></li>
             <li><a href="/terms">Terms</a></li>
-            <li><a href="mailto:support@tabmonitor.com">Support</a></li>
+            <li><a href="mailto:eaconsulting.supp@gmail.com">Support</a></li>
           </ul>
         </div>
       </footer>

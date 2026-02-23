@@ -63,8 +63,8 @@ const PRICING = [
   },
   {
     name: 'Pro',
-    price: '49',
-    period: 'per year',
+    price: '29',
+    period: 'per month',
     features: [
       'Everything in Free',
       'Advanced insights',

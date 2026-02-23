@@ -63,7 +63,7 @@ const PRICING = [
   },
   {
     name: 'Pro',
-    price: '29',
+    price: '2.99',
     period: 'per month',
     features: [
       'Everything in Free',
@@ -768,7 +768,7 @@ export default function LandingPage() {
               <div key={plan.name} className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}>
                 <p className="plan-name">{plan.name}</p>
                 <div className="plan-price">
-                  {plan.price === '0' ? 'Free' : <><sup>kr</sup>{plan.price}</>}
+                  {plan.price === '0' ? 'Free' : <><sup>$USD</sup>{plan.price}</>}
                 </div>
                 <p className="plan-period">{plan.period}</p>
                 <ul className="plan-features">

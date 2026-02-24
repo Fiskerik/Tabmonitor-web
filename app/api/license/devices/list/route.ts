@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+const REVOKED_LAST_SEEN_AT = '1970-01-01T00:00:00.000Z';
+
 export async function POST(req: Request) {
   try {
     const { email } = await req.json();
@@ -8,19 +10,14 @@ export async function POST(req: Request) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Verifiera att licensen är aktiv
     const { data: license } = await supabaseAdmin
       .from('licenses')
-      .select('is_active, trial_ends_at')
+      .select('email')
       .eq('email', cleanEmail)
       .single();
 
-    const now = Date.now();
-    const trialActive = license?.trial_ends_at
-      ? new Date(license.trial_ends_at).getTime() > now : false;
-    
-    if (!license?.is_active && !trialActive) {
-      return NextResponse.json({ error: 'No active license' }, { status: 403 });
+    if (!license?.email) {
+      return NextResponse.json({ error: 'License not found' }, { status: 404 });
     }
 
     const { data: devices, error: devicesError } = await supabaseAdmin
@@ -37,7 +34,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Failed to fetch devices' }, { status: 500 });
     }
 
-    return NextResponse.json({ devices: devices || [] });
+    const visibleDevices = (devices || []).filter(d => d.last_seen_at !== REVOKED_LAST_SEEN_AT);
+    return NextResponse.json({ devices: visibleDevices });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

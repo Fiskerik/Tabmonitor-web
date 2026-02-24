@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+const REVOKED_LAST_SEEN_AT = '1970-01-01T00:00:00.000Z';
+
 export async function POST(req: Request) {
   try {
     const { email, deviceId } = await req.json();
@@ -10,22 +12,23 @@ export async function POST(req: Request) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Verifiera licensen
     const { data: license } = await supabaseAdmin
-      .from('licenses').select('is_active').eq('email', cleanEmail).single();
-    if (!license?.is_active) {
-      return NextResponse.json({ error: 'No active license' }, { status: 403 });
+      .from('licenses').select('email').eq('email', cleanEmail).single();
+
+    if (!license?.email) {
+      return NextResponse.json({ error: 'License not found' }, { status: 404 });
     }
 
     const { error } = await supabaseAdmin
       .from('license_devices')
-      .delete()
+      .update({ last_seen_at: REVOKED_LAST_SEEN_AT })
       .eq('license_email', cleanEmail)
       .eq('device_id', deviceId);
 
     if (error) throw error;
 
-    return NextResponse.json({ success: true });
+    console.log('[license/devices/remove] Device revoked', { email: cleanEmail, deviceId });
+    return NextResponse.json({ success: true, deviceRevoked: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

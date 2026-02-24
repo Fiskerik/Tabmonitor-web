@@ -103,7 +103,7 @@ async function syncFromStripe(email: string) {
     if (!customers.data.length) return;
 
     let bestCustomerId: string | null = null;
-    let bestSub: Stripe.Subscription | null = null;
+    let bestSub: any = null; // Ändra från Stripe.Subscription till any
 
     for (const customer of customers.data) {
       const subs = await stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 5 });
@@ -130,7 +130,12 @@ async function syncFromStripe(email: string) {
       fields.is_active = isActive;
       fields.plan = isActive ? 'pro' : 'free';
       fields.stripe_subscription_id = bestSub.id;
-      fields.current_period_end = new Date(bestSub.current_period_end * 1000).toISOString();
+      
+      // FIX: Använd optional chaining och säkerställ att värdet finns
+      if (bestSub.current_period_end) {
+        fields.current_period_end = new Date(bestSub.current_period_end * 1000).toISOString();
+      }
+      
       if (bestSub.trial_end) {
         fields.trial_ends_at = new Date(bestSub.trial_end * 1000).toISOString();
       }

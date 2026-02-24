@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 const REASONS = [
   { id: 'not-useful',    label: "It didn't do what I expected" },
   { id: 'too-slow',      label: "It slowed down my browser" },
@@ -15,10 +16,12 @@ const REASONS = [
 type Step = 'form' | 'submitted';
 
 export default function UninstallPage() {
-  const [step, setStep]             = useState<Step>('form');
+  const searchParams = useSearchParams(); 
+  const [step, setStep] = useState<Step>('form');
   const [selected, setSelected]     = useState<string | null>(null);
   const [detail, setDetail]         = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const emailFromUrl = searchParams.get('email');
 
   async function handleSubmit() {
     if (!selected) return;
@@ -27,7 +30,11 @@ export default function UninstallPage() {
       await fetch('/api/feedback/uninstall', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason: selected, detail: detail.trim() }),
+        body: JSON.stringify({ 
+          reason: selected, 
+          detail: detail.trim(),
+          email: emailFromUrl // Lägg till denna rad!
+        }),
       });
     } catch {}
     setSubmitting(false);
@@ -318,5 +325,14 @@ export default function UninstallPage() {
         )}
       </div>
     </>
+  );
+}
+
+
+export default function UninstallPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#06090f]" />}>
+      <UninstallPage />
+    </Suspense>
   );
 }

@@ -24,6 +24,9 @@ export async function POST(req: Request) {
       .from('licenses')
       .select('*')
       .eq('email', cleanEmail)
+      .update({ 
+      last_login_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()})
       .single();
 
     if (error) throw error;

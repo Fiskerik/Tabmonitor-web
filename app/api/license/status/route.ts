@@ -78,6 +78,9 @@ async function handleDeviceRegistration(email: string, deviceId: string) {
       .from('license_devices')
       .update({ last_seen_at: new Date().toISOString() })
       .eq('license_email', email)
+      .update({ 
+      last_login_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()})
       .eq('device_id', deviceId);
     return { success: true };
   }

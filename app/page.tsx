@@ -72,7 +72,7 @@ const PRICING = [
       'CSV export',
       'Priority support',
     ],
-    cta: 'Start 7-day trial',
+    cta: 'Start 3-day trial',
     highlight: true,
   },
 ];
@@ -625,7 +625,7 @@ export default function LandingPage() {
                 <ul className="plan-features">
                   {plan.features.map(f => <li key={f}>{f}</li>)}
                 </ul>
-                <a href="#download" className={`plan-cta ${plan.highlight ? 'primary' : 'secondary'}`}>{plan.cta}</a>
+                <a href="https://buy.stripe.com/3cI00idIFeLp3qb3sSc3m03" className={`plan-cta ${plan.highlight ? 'primary' : 'secondary'}`}>{plan.cta}</a>
               </div>
             ))}
           </div>

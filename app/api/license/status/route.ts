@@ -64,20 +64,39 @@ export async function POST(req: Request) {
 }
 
 async function handleDeviceRegistration(email: string, deviceId: string): Promise<{ success: boolean }> {
-  const { data: devices } = await supabaseAdmin
+  const { data: devices, error: devicesError } = await supabaseAdmin
     .from('license_devices')
     .select('device_id')
     .eq('license_email', email);
+
+  if (devicesError) {
+    console.error('[license/status] Failed to fetch device list', {
+      email,
+      deviceId,
+      error: devicesError.message,
+    });
+    return { success: false };
+  }
 
   const knownIds = (devices || []).map(d => d.device_id);
 
   // Känd enhet → uppdatera last_seen och godkänn
   if (knownIds.includes(deviceId)) {
-    await supabaseAdmin
+    const { error: updateError } = await supabaseAdmin
       .from('license_devices')
       .update({ last_seen_at: new Date().toISOString() })
       .eq('license_email', email)
       .eq('device_id', deviceId);
+
+    if (updateError) {
+      console.error('[license/status] Failed to update known device', {
+        email,
+        deviceId,
+        error: updateError.message,
+      });
+      return { success: false };
+    }
+
     return { success: true };
   }
 
@@ -87,12 +106,20 @@ async function handleDeviceRegistration(email: string, deviceId: string): Promis
   }
 
   // Ny enhet inom gränsen → registrera
-  await supabaseAdmin.from('license_devices').insert({
+  const { error: insertError } = await supabaseAdmin.from('license_devices').insert({
     license_email: email,
     device_id: deviceId,
-    first_seen_at: new Date().toISOString(),
     last_seen_at: new Date().toISOString(),
   });
+
+  if (insertError) {
+    console.error('[license/status] Failed to insert new device', {
+      email,
+      deviceId,
+      error: insertError.message,
+    });
+    return { success: false };
+  }
 
   return { success: true };
 }

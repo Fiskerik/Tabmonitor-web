@@ -23,11 +23,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No active license' }, { status: 403 });
     }
 
-    const { data: devices } = await supabaseAdmin
+    const { data: devices, error: devicesError } = await supabaseAdmin
       .from('license_devices')
-      .select('device_id, first_seen_at, last_seen_at, label')
+      .select('device_id, last_seen_at')
       .eq('license_email', cleanEmail)
       .order('last_seen_at', { ascending: false });
+
+    if (devicesError) {
+      console.error('[license/devices/list] Failed to fetch devices', {
+        email: cleanEmail,
+        error: devicesError.message,
+      });
+      return NextResponse.json({ error: 'Failed to fetch devices' }, { status: 500 });
+    }
 
     return NextResponse.json({ devices: devices || [] });
   } catch (err: any) {

@@ -1,14 +1,25 @@
 import { NextResponse } from 'next/server';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: Request) {
   try {
     const { reason, details, email } = await req.json();
 
-    // HÄR: Du kan t.ex. spara detta i en ny tabell i Supabase som heter 'uninstalls'
-    console.log(`Uninstall feedback: ${reason} - ${details} (${email})`);
+    const { error } = await supabaseAdmin
+      .from('uninstall_feedback')
+      .insert([
+        { 
+          email: email?.toLowerCase().trim(), 
+          reason, 
+          details 
+        }
+      ]);
+
+    if (error) throw error;
 
     return NextResponse.json({ success: true });
-  } catch (err) {
+  } catch (err: any) {
+    console.error('[uninstall-feedback] Error:', err.message);
     return NextResponse.json({ error: 'Failed to save feedback' }, { status: 500 });
   }
 }

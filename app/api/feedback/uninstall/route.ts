@@ -3,7 +3,17 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: Request) {
   try {
-    const { reason, details, email } = await req.json();
+    const { reason, details, email, rating } = await req.json();
+    const parsedRating = typeof rating === 'number' && Number.isInteger(rating) && rating >= 1 && rating <= 5
+      ? rating
+      : null;
+
+    console.log('[uninstall-feedback] payload', {
+      hasReason: !!reason,
+      hasDetails: typeof details === 'string' && details.trim().length > 0,
+      hasEmail: !!email,
+      rating: parsedRating,
+    });
 
     const { error } = await supabaseAdmin
       .from('uninstall_feedback')
@@ -11,7 +21,8 @@ export async function POST(req: Request) {
         { 
           email: email?.toLowerCase().trim(), 
           reason, 
-          details 
+          details,
+          rating: parsedRating,
         }
       ]);
 

@@ -131,13 +131,15 @@ async function syncFromStripe(email: string) {
       fields.plan = isActive ? 'pro' : 'free';
       fields.stripe_subscription_id = bestSub.id;
       
-      // FIX: Använd optional chaining och säkerställ att värdet finns
-      if (bestSub.current_period_end) {
-        fields.current_period_end = new Date(bestSub.current_period_end * 1000).toISOString();
+      // Vi castar bestSub till 'any' här för att bypassa den strikta typkontrollen
+      const subData = bestSub as any;
+    
+      if (subData.current_period_end) {
+        fields.current_period_end = new Date(subData.current_period_end * 1000).toISOString();
       }
       
-      if (bestSub.trial_end) {
-        fields.trial_ends_at = new Date(bestSub.trial_end * 1000).toISOString();
+      if (subData.trial_end) {
+        fields.trial_ends_at = new Date(subData.trial_end * 1000).toISOString();
       }
     }
 

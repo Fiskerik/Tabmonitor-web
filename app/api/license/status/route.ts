@@ -57,9 +57,13 @@ export async function POST(req: Request) {
       }
     }
 
+    // Build base payload from license row
     const payload = buildPayload(finalRow);
     const maxDevices = payload.isActive ? MAX_DEVICES_PRO : MAX_DEVICES_FREE;
 
+    // CRITICAL: Device registration must happen BEFORE returning payload
+    // Free users are limited to 1 device, so the first device gets the license
+    // If a second device tries to sign in while already at device limit, deny access
     if (deviceId) {
       const deviceCheck = await handleDeviceRegistration(cleanEmail, deviceId, maxDevices);
       if (!deviceCheck.success) {
@@ -69,16 +73,29 @@ export async function POST(req: Request) {
           deviceId,
           reason: deviceCheck.reason,
           maxDevices,
+          currentPlan: payload.plan,
         });
 
+        // FIX: Return FREE status to denied device (don't leak Pro status to over-limit devices)
         return NextResponse.json({
+          plan: 'free',
+          isActive: false,
+          trialEndsAt: null,
+          currentPeriodEnd: null,
+          features: {
+            advancedStats: false,
+            rulesEngine: false,
+            weeklyReports: false,
+            csvExport: false,
+          },
+          checkedAt: Math.floor(Date.now() / 1000),
+          maxDevices: MAX_DEVICES_FREE,
           error: isRevoked ? 'Device revoked' : 'Device limit reached',
           code: deviceCheck.reason,
-          maxDevices,
           message: isRevoked
             ? 'This device was removed from your account. Please sign in again from the extension.'
-            : `This account is already active on ${maxDevices} device${maxDevices > 1 ? 's' : ''}. Remove a device to continue.`,
-        }, { status: 403 });
+            : `This account is already active on ${maxDevices} device${maxDevices > 1 ? 's' : ''}. Remove a device at tabmonitor-web.vercel.app to continue.`,
+        }, { status: 200 }); // Changed to 200 so extension doesn't crash
       }
     }
 

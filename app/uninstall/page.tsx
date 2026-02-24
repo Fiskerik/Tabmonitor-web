@@ -20,6 +20,7 @@ function UninstallPage() {
   const [step, setStep] = useState<Step>('form');
   const [selected, setSelected]     = useState<string | null>(null);
   const [detail, setDetail]         = useState('');
+  const [rating, setRating]         = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
   const emailFromUrl = searchParams.get('email');
 
@@ -32,8 +33,9 @@ function UninstallPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           reason: selected, 
-          detail: detail.trim(),
-          email: emailFromUrl // Lägg till denna rad!
+          details: detail.trim(),
+          rating: rating || null,
+          email: emailFromUrl,
         }),
       });
     } catch {}
@@ -154,6 +156,53 @@ function UninstallPage() {
         .detail-field:focus { border-color: rgba(0,212,255,0.3); }
         .detail-field::placeholder { color: var(--dim); }
 
+        .rating-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--dim);
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .rating-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 16px;
+        }
+
+        .star-btn {
+          background: transparent;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          color: var(--dim);
+          font-size: 20px;
+          width: 42px;
+          height: 38px;
+          cursor: pointer;
+          transition: all 0.15s;
+        }
+
+        .star-btn:hover {
+          border-color: rgba(0,212,255,0.4);
+          color: #ffd166;
+          transform: translateY(-1px);
+        }
+
+        .star-btn.active {
+          color: #ffd166;
+          border-color: rgba(255,209,102,0.45);
+          background: rgba(255,209,102,0.1);
+        }
+
+        .rating-help {
+          margin-bottom: 14px;
+          color: var(--mid);
+          font-size: 12px;
+        }
+
         /* ── Buttons ── */
         .btn-submit {
           width: 100%; padding: 14px;
@@ -258,6 +307,22 @@ function UninstallPage() {
 
             {selected && (
               <div className="fade-up">
+                <label className="rating-label">How would you rate TabMonitor?</label>
+                <div className="rating-row">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      className={`star-btn ${rating >= star ? 'active' : ''}`}
+                      onClick={() => setRating(star)}
+                      aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <div className="rating-help">Optional, but helpful for us.</div>
+
                 <label className="detail-label">Anything else you'd like to add? (optional)</label>
                 <textarea
                   className="detail-field"

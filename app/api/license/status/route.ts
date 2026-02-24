@@ -3,7 +3,14 @@ import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' as any });
-const MAX_DEVICES = 3;
+const MAX_DEVICES_PRO = 3;
+const MAX_DEVICES_FREE = 1;
+const REVOKED_LAST_SEEN_AT = '1970-01-01T00:00:00.000Z';
+
+type DeviceCheckResult = {
+  success: boolean;
+  reason?: 'DEVICE_LIMIT_REACHED' | 'DEVICE_REVOKED';
+};
 
 export async function POST(req: Request) {
   try {
@@ -12,12 +19,10 @@ export async function POST(req: Request) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // 1. Skapa rad om den inte finns (ignorera om den redan finns)
     await supabaseAdmin
       .from('licenses')
       .upsert({ email: cleanEmail }, { onConflict: 'email', ignoreDuplicates: true });
 
-    // 2. Hämta licensdata
     const { data: row, error } = await supabaseAdmin
       .from('licenses')
       .select('*')
@@ -26,13 +31,11 @@ export async function POST(req: Request) {
 
     if (error || !row) throw new Error('Could not fetch license row');
 
-    // 3. Uppdatera last_login_at separat
     await supabaseAdmin
       .from('licenses')
       .update({ last_login_at: new Date().toISOString(), updated_at: new Date().toISOString() })
       .eq('email', cleanEmail);
 
-    // 4. Om Stripe-ID saknas, synka från Stripe
     let finalRow = row;
     if (!row.stripe_customer_id) {
       await syncFromStripe(cleanEmail);
@@ -41,32 +44,42 @@ export async function POST(req: Request) {
       if (updated) finalRow = updated;
     }
 
-    // 5. Enhetskontroll — bara för aktiva Pro-användare
     const payload = buildPayload(finalRow);
-    if (payload.isActive && deviceId) {
-      const deviceCheck = await handleDeviceRegistration(cleanEmail, deviceId);
+    const maxDevices = payload.isActive ? MAX_DEVICES_PRO : MAX_DEVICES_FREE;
+
+    if (deviceId) {
+      const deviceCheck = await handleDeviceRegistration(cleanEmail, deviceId, maxDevices);
       if (!deviceCheck.success) {
+        const isRevoked = deviceCheck.reason === 'DEVICE_REVOKED';
+        console.log('[license/status] Device authorization denied', {
+          email: cleanEmail,
+          deviceId,
+          reason: deviceCheck.reason,
+          maxDevices,
+        });
+
         return NextResponse.json({
-          error: 'Device limit reached',
-          code: 'DEVICE_LIMIT_REACHED',
-          maxDevices: MAX_DEVICES,
-          // Skicka med listan så UI kan visa vilka som är registrerade
-          message: `This license is already active on ${MAX_DEVICES} devices. Remove a device in the billing portal.`
+          error: isRevoked ? 'Device revoked' : 'Device limit reached',
+          code: deviceCheck.reason,
+          maxDevices,
+          message: isRevoked
+            ? 'This device was removed from your account. Please sign in again from the extension.'
+            : `This account is already active on ${maxDevices} device${maxDevices > 1 ? 's' : ''}. Remove a device to continue.`,
         }, { status: 403 });
       }
     }
 
-    return NextResponse.json(payload);
+    return NextResponse.json({ ...payload, maxDevices });
   } catch (err: any) {
     console.error('[license/status]', err.message);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-async function handleDeviceRegistration(email: string, deviceId: string): Promise<{ success: boolean }> {
+async function handleDeviceRegistration(email: string, deviceId: string, maxDevices: number): Promise<DeviceCheckResult> {
   const { data: devices, error: devicesError } = await supabaseAdmin
     .from('license_devices')
-    .select('device_id')
+    .select('device_id, last_seen_at')
     .eq('license_email', email);
 
   if (devicesError) {
@@ -75,13 +88,16 @@ async function handleDeviceRegistration(email: string, deviceId: string): Promis
       deviceId,
       error: devicesError.message,
     });
-    return { success: false };
+    return { success: false, reason: 'DEVICE_LIMIT_REACHED' };
   }
 
-  const knownIds = (devices || []).map(d => d.device_id);
+  const knownDevice = (devices || []).find(d => d.device_id === deviceId);
 
-  // Känd enhet → uppdatera last_seen och godkänn
-  if (knownIds.includes(deviceId)) {
+  if (knownDevice) {
+    if (knownDevice.last_seen_at === REVOKED_LAST_SEEN_AT) {
+      return { success: false, reason: 'DEVICE_REVOKED' };
+    }
+
     const { error: updateError } = await supabaseAdmin
       .from('license_devices')
       .update({ last_seen_at: new Date().toISOString() })
@@ -94,18 +110,17 @@ async function handleDeviceRegistration(email: string, deviceId: string): Promis
         deviceId,
         error: updateError.message,
       });
-      return { success: false };
+      return { success: false, reason: 'DEVICE_LIMIT_REACHED' };
     }
 
     return { success: true };
   }
 
-  // Ny enhet men fullt → neka
-  if (knownIds.length >= MAX_DEVICES) {
-    return { success: false };
+  const activeDevices = (devices || []).filter(d => d.last_seen_at !== REVOKED_LAST_SEEN_AT);
+  if (activeDevices.length >= maxDevices) {
+    return { success: false, reason: 'DEVICE_LIMIT_REACHED' };
   }
 
-  // Ny enhet inom gränsen → registrera
   const { error: insertError } = await supabaseAdmin.from('license_devices').insert({
     license_email: email,
     device_id: deviceId,
@@ -118,7 +133,7 @@ async function handleDeviceRegistration(email: string, deviceId: string): Promis
       deviceId,
       error: insertError.message,
     });
-    return { success: false };
+    return { success: false, reason: 'DEVICE_LIMIT_REACHED' };
   }
 
   return { success: true };
@@ -130,7 +145,7 @@ async function syncFromStripe(email: string) {
     if (!customers.data.length) return;
 
     let bestCustomerId: string | null = null;
-    let bestSub: any = null; // Ändra från Stripe.Subscription till any
+    let bestSub: any = null;
 
     for (const customer of customers.data) {
       const subs = await stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 5 });
@@ -157,14 +172,13 @@ async function syncFromStripe(email: string) {
       fields.is_active = isActive;
       fields.plan = isActive ? 'pro' : 'free';
       fields.stripe_subscription_id = bestSub.id;
-      
-      // Vi castar bestSub till 'any' här för att bypassa den strikta typkontrollen
+
       const subData = bestSub as any;
-    
+
       if (subData.current_period_end) {
         fields.current_period_end = new Date(subData.current_period_end * 1000).toISOString();
       }
-      
+
       if (subData.trial_end) {
         fields.trial_ends_at = new Date(subData.trial_end * 1000).toISOString();
       }

@@ -15,8 +15,8 @@ const REASONS = [
 
 type Step = 'form' | 'submitted';
 
-export default function UninstallPage() {
-  const searchParams = useSearchParams(); 
+function UninstallPage() {
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>('form');
   const [selected, setSelected]     = useState<string | null>(null);
   const [detail, setDetail]         = useState('');

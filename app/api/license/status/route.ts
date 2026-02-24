@@ -37,11 +37,24 @@ export async function POST(req: Request) {
       .eq('email', cleanEmail);
 
     let finalRow = row;
-    if (!row.stripe_customer_id) {
+    const shouldSyncFromStripe = !row.stripe_customer_id || !row.is_active;
+
+    if (shouldSyncFromStripe) {
+      console.log('[license/status] Running Stripe sync for license status', {
+        email: cleanEmail,
+        reason: !row.stripe_customer_id ? 'missing_customer_id' : 'inactive_or_free',
+      });
+
       await syncFromStripe(cleanEmail);
       const { data: updated } = await supabaseAdmin
-        .from('licenses').select('*').eq('email', cleanEmail).single();
-      if (updated) finalRow = updated;
+        .from('licenses')
+        .select('*')
+        .eq('email', cleanEmail)
+        .single();
+
+      if (updated) {
+        finalRow = updated;
+      }
     }
 
     const payload = buildPayload(finalRow);

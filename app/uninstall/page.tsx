@@ -374,7 +374,7 @@ function UninstallPage() {
             </p>
 
             <a
-              href="https://chromewebstore.google.com"
+              href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd"
               className="reinstall-btn"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">

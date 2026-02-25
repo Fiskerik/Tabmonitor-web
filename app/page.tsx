@@ -1,6 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import tabmonitorLogo from '../logo.png';
+import tabmonitorIcon from '../icon48.png';
 
 const NAV_LINKS = ['Features', 'Pricing', 'Download'];
 
@@ -317,6 +320,12 @@ export default function LandingPage() {
           letter-spacing: 0.1em; color: var(--cyan);
           display: flex; align-items: center; gap: 8px;
         }
+        .brand-logo {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          box-shadow: 0 0 16px rgba(0,212,255,0.35);
+        }
         .nav-badge {
           font-family: 'JetBrains Mono', monospace; font-size: 8px;
           background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.25);
@@ -497,6 +506,17 @@ export default function LandingPage() {
         /* ── Footer ── */
         .footer-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }
         .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.1em; color: var(--text-dim); }
+        .footer-logo-wrap {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .footer-logo-img {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          opacity: 0.8;
+        }
         .footer-links { display: flex; gap: 24px; list-style: none; }
         .footer-links a { font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: #4a5568; }
@@ -532,6 +552,7 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-logo">
+          <Image src={tabmonitorLogo} alt="TabMonitor logo" className="brand-logo" priority />
           TabMonitor
           <span className="nav-badge">v1.0</span>
         </div>
@@ -584,7 +605,9 @@ export default function LandingPage() {
               {['#ff5f57','#febc2e','#28c840'].map((c,i) => <div key={i} className="chrome-dot" style={{ background: c }} />)}
             </div>
             <div className="chrome-url">chrome-extension://tabmonitor/sidepanel.html</div>
-            <div className="chrome-ext-icon">TM</div>
+            <div className="chrome-ext-icon">
+              <Image src={tabmonitorIcon} alt="TabMonitor extension icon" width={20} height={20} />
+            </div>
           </div>
           <ExtensionMockup />
         </div>
@@ -655,7 +678,10 @@ export default function LandingPage() {
       {/* ── Footer ── */}
       <footer>
         <div className="footer-inner">
-          <span className="footer-logo">TabMonitor</span>
+          <span className="footer-logo footer-logo-wrap">
+            <Image src={tabmonitorLogo} alt="TabMonitor logo" className="footer-logo-img" />
+            TabMonitor
+          </span>
           <ul className="footer-links">
             <li><a href="/privacy">Privacy</a></li>
             <li><a href="/terms">Terms</a></li>

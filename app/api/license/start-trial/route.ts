@@ -3,6 +3,7 @@
 
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getAuthenticatedEmail } from '@/lib/auth';
 
 const TRIAL_DAYS = 7;
 
@@ -10,9 +11,18 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const email = (body.email || '').trim().toLowerCase();
+    const authenticatedEmail = await getAuthenticatedEmail(req);
+
+    if (!authenticatedEmail) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 });
+    }
+
+    if (email !== authenticatedEmail) {
+      return NextResponse.json({ error: 'Email mismatch' }, { status: 403 });
     }
 
     // Upsert the user row (create if not exists)

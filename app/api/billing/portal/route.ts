@@ -5,6 +5,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getAuthenticatedEmail } from '@/lib/auth';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' as any });
 
@@ -13,7 +14,15 @@ export async function POST(req: Request) {
     const { email } = await req.json();
     if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 });
 
+    const authenticatedEmail = await getAuthenticatedEmail(req);
+    if (!authenticatedEmail) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const cleanEmail = email.trim().toLowerCase();
+    if (cleanEmail !== authenticatedEmail) {
+      return NextResponse.json({ error: 'Email mismatch' }, { status: 403 });
+    }
     const origin = new URL(req.url).origin;
 
     // 1. Look up license row

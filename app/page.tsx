@@ -538,7 +538,7 @@ export default function LandingPage() {
         <ul className="nav-links">
           {NAV_LINKS.map(l => <li key={l}><a href={`#${l.toLowerCase()}`}>{l}</a></li>)}
         </ul>
-        <a href="#download" className="nav-cta">
+        <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="nav-cta">
           Add to Chrome →
         </a>
       </nav>
@@ -558,7 +558,7 @@ export default function LandingPage() {
             TabMonitor shows exactly which tabs are draining your memory and CPU — live, per-tab, every 3 seconds. Kill the lag in one click.
           </p>
           <div className="hero-buttons">
-            <a href="#download" className="btn-primary">⬇ Add to Chrome — Free</a>
+            <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="btn-primary">⬇ Add to Chrome — Free</a>
             <a href="#features" className="btn-ghost">See features</a>
           </div>
           <div className="stats-bar">
@@ -639,7 +639,7 @@ export default function LandingPage() {
             <h2 className="download-title">Ready to reclaim your RAM?</h2>
             <p className="download-sub">Free to install. No account required. Works immediately after adding to Chrome.</p>
           </div>
-          <a href="https://chromewebstore.google.com" className="chrome-badge">
+          <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="chrome-badge">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" fill="#4285F4"/>
               <circle cx="12" cy="12" r="4" fill="white"/>

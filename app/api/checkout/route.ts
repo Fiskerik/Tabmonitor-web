@@ -2,13 +2,14 @@
 // Handles both regular checkout and 3-day free trial (card required, no charge for 3 days)
 
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getAuthenticatedEmail } from '@/lib/auth';
+import { getStripeServerClient } from '@/lib/stripe-server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' as any });
 
 export async function POST(req: Request) {
+  const stripe = getStripeServerClient();
   try {
     const { email, plan = 'monthly', trial = false } = await req.json();
     if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 });

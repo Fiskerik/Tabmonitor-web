@@ -1,4 +1,4 @@
-import { createClient, createAdminClient } from '@/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 
 export async function getAuthenticatedEmail(req: Request): Promise<string | null> {
   const authHeader = req.headers.get('authorization')
@@ -15,7 +15,7 @@ export async function getAuthenticatedEmail(req: Request): Promise<string | null
     return data.user.email.trim().toLowerCase()
   }
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
 
   if (error || !data.user?.email) {

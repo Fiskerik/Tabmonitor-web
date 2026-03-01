@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getAuthenticatedEmail } from '@/lib/auth';
+import { getStripeServerClient } from '@/lib/stripe-server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' as any });
 const MAX_DEVICES_PRO = 3;
 const MAX_DEVICES_FREE = 1;
 const REVOKED_LAST_SEEN_AT = '1970-01-01T00:00:00.000Z';
@@ -14,6 +13,7 @@ type DeviceCheckResult = {
 };
 
 export async function POST(req: Request) {
+  const stripe = getStripeServerClient();
   try {
     const { email, deviceId } = await req.json();
     if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 });
@@ -179,6 +179,7 @@ async function handleDeviceRegistration(email: string, deviceId: string, maxDevi
 }
 
 async function syncFromStripe(email: string) {
+  const stripe = getStripeServerClient();
   try {
     const customers = await stripe.customers.list({ email, limit: 5 });
     if (!customers.data.length) return;

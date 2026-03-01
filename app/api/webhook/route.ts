@@ -3,10 +3,10 @@
 // We must fall back to email lookup when stripe_customer_id match finds 0 rows.
 
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import type Stripe from 'stripe';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { getStripeServerClient } from '@/lib/stripe-server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2023-10-16' as any });
 
 // Helper: update license by customer ID, falling back to email if no rows matched
 async function updateLicenseByCustomer(
@@ -14,6 +14,8 @@ async function updateLicenseByCustomer(
   email: string | null | undefined,
   fields: Record<string, any>
 ) {
+  const stripe = getStripeServerClient();
+
   // 1. Try by stripe_customer_id (normal checkout flow)
   const { data: byId, error: idErr } = await supabaseAdmin
     .from('licenses')
@@ -66,6 +68,7 @@ async function updateLicenseByCustomer(
 }
 
 export async function POST(req: Request) {
+  const stripe = getStripeServerClient();
   const body = await req.text();
   const signature = req.headers.get('stripe-signature')!;
 

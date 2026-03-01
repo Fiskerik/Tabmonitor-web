@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       )
     }
     
-    const supabase = createClient()
+    const supabase = await createClient()
     
     // Determine redirect URL
     const redirectTo = isExtension 

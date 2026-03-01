@@ -582,7 +582,7 @@ export default function LandingPage() {
             <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="btn-primary">⬇ Add to Chrome — Free</a>
             <a href="#features" className="btn-ghost">See features</a>
           </div>
-         <div className="stats-bar" display="none" hidden>
+         <div className="stats-bar" hidden>
             <div>
               <span className="stat-num"><AnimatedCounter target={2400} suffix="+" /></span>
               <span className="stat-label">Active users</span>

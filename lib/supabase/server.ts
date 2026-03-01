@@ -19,7 +19,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             })
           } catch {
-            // Server Component can't set cookies.
+            // Ignore when called from a Server Component where cookies are read-only.
           }
         },
       },
@@ -27,10 +27,9 @@ export async function createClient() {
   )
 }
 
-// Admin client (bypass RLS)
 export function createAdminClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.STRIPE_SUPABASE_SERVICE_ROLE_KEY!
   )
 }

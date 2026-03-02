@@ -7,6 +7,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Tabmonitor",
   description: "Automatisera ditt arbetsflöde med Tabmonitor.",
+  verification: {
+    google: "a7ooX99wNHGQkLtrXE6yZp6A_dw1L1lpWOvVXN-DUgI",
+  },
   icons: {
     icon: [
       { url: icon32.src, sizes: "32x32", type: "image/png" },

@@ -566,6 +566,9 @@ export default function LandingPage() {
           .nav { padding: 16px 24px; }
           .nav.scrolled { padding: 12px 24px; }
           .nav-links { display: none; }
+          .nav-cta { display: none; }
+          .hero-buttons { width: 100%; }
+          .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
           .download-inner { grid-template-columns: 1fr; gap: 28px; }
           .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
         }
@@ -621,7 +624,7 @@ export default function LandingPage() {
               <span className="stat-num"><AnimatedCounter target={100} suffix="%" /></span>
               <span className="stat-label">Free forever</span>
             </div>
-          </div>*/
+          </div>
         </div>
 
         {/* Accurate extension mockup */}

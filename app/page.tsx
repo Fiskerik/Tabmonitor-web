@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Script from 'next/script';
 import tabmonitorLogo from '../logo.png';
 import tabmonitorIcon from '../icon48.png';
 
@@ -79,6 +80,27 @@ const PRICING = [
     highlight: true,
   },
 ];
+
+const SEO_STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Tab Monitor',
+  applicationCategory: 'BrowserApplication',
+  operatingSystem: 'Chrome',
+  description:
+    'Tab Monitor is a Chrome extension that shows RAM and CPU usage for each browser tab, with one-click actions to suspend or close resource-heavy tabs.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4',
+    ratingCount: '2400',
+  },
+  url: 'https://www.tabmonitor.se',
+};
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -257,6 +279,10 @@ export default function LandingPage() {
 
   return (
     <>
+      <Script id="tabmonitor-seo-structured-data" type="application/ld+json">
+        {JSON.stringify(SEO_STRUCTURED_DATA)}
+      </Script>
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 

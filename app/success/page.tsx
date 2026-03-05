@@ -1,3 +1,17 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Payment Success',
+  description: 'Your Tab Monitor payment was completed successfully. Return to the extension and unlock premium features.',
+  alternates: {
+    canonical: '/success',
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function SuccessPage() {
   return (
     <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 text-center">

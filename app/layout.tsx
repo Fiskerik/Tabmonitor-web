@@ -7,13 +7,20 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.tabmonitor.se"),
   title: {
-    default: "Tab Monitor Extension | Monitor and Reduce Chrome Tab RAM Usage",
+    default: "TabMonitor Side Panel | Focus, Productivity, Tab Monitoring & Pomodoro",
     template: "%s | Tab Monitor",
   },
   description:
-    "Tab Monitor is a Chrome extension that tracks RAM and CPU usage per tab in real time, helps you suspend tabs, and reclaim browser performance instantly.",
+    "TabMonitor is a Chrome side panel extension for focus and productivity. Monitor RAM/CPU usage, manage tasks, run a pomodoro flow, and use a smart tab manager to reduce tab overload.",
   keywords: [
     "tab monitor extension",
+    "side panel extension",
+    "focus",
+    "productivity",
+    "monitoring",
+    "task manager",
+    "tab manager",
+    "pomodoro",
     "Chrome tab memory usage",
     "browser RAM monitor",
     "CPU usage per tab",
@@ -29,15 +36,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://www.tabmonitor.se",
     siteName: "Tab Monitor",
-    title: "Tab Monitor Extension | Monitor and Reduce Chrome Tab RAM Usage",
+    title: "TabMonitor Side Panel | Focus, Productivity, Tab Monitoring & Pomodoro",
     description:
-      "Track RAM and CPU usage for every Chrome tab, suspend heavy tabs, and speed up your browser with Tab Monitor.",
+      "Use TabMonitor to stay focused, monitor heavy tabs, manage tasks, and keep Chrome fast from a single side panel.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tab Monitor Extension | Monitor and Reduce Chrome Tab RAM Usage",
+    title: "TabMonitor Side Panel | Focus, Productivity, Tab Monitoring & Pomodoro",
     description:
-      "Track RAM and CPU usage per tab, suspend heavy tabs, and keep Chrome fast with Tab Monitor.",
+      "A productivity-focused tab manager and monitoring side panel with focus tools and pomodoro-ready workflows.",
   },
   robots: {
     index: true,

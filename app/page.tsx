@@ -88,7 +88,7 @@ const SEO_STRUCTURED_DATA = {
   applicationCategory: 'BrowserApplication',
   operatingSystem: 'Chrome',
   description:
-    'Tab Monitor is a Chrome extension that shows RAM and CPU usage for each browser tab, with one-click actions to suspend or close resource-heavy tabs.',
+    'TabMonitor is a Chrome side panel extension for focus and productivity. It provides live tab monitoring, tab manager controls, lightweight task manager support, and pomodoro-friendly workflows to reduce tab overload.',
   offers: {
     '@type': 'Offer',
     price: '0',
@@ -600,12 +600,12 @@ export default function LandingPage() {
             <span className="live-dot" /> Chrome Extension · Free forever
           </p>
           <h1 className="hero-title">
-            Your tabs<br />
-            are eating<br />
-            <span className="accent">your RAM.</span>
+            Side panel control<br />
+            for focused<br />
+            <span className="accent">tab productivity.</span>
           </h1>
           <p className="hero-desc">
-            TabMonitor shows exactly which tabs are draining your memory and CPU — live, per-tab, every 3 seconds. Kill the lag in one click.
+            TabMonitor gives you one side panel for monitoring, tab management, and focus. See heavy tabs live, cut browser lag fast, and stay organized with task manager and pomodoro-style workflows.
           </p>
           <div className="hero-buttons">
             <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="btn-primary">⬇ Add to Chrome — Free</a>
@@ -647,7 +647,7 @@ export default function LandingPage() {
         <div className="section-inner">
           <p className="section-label">Features</p>
           <h2 className="section-title">Everything your browser<br />never told you</h2>
-          <p className="section-sub">Real-time data on every open tab — with the tools to act on it immediately.</p>
+          <p className="section-sub">Built for people who want focus and productivity: monitor every tab in real time, manage noisy sessions, and take action before Chrome slows down.</p>
           <div className="features-grid">
             {FEATURES.map(f => (
               <div key={f.title} className="feature-card">

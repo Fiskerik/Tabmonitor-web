@@ -10,6 +10,12 @@ const NAV_LINKS = ['Features', 'Pricing', 'Download'];
 
 const FEATURES = [
   {
+    icon: '🔒',
+    title: 'Focus Mode lock',
+    desc: 'Preserve selected tabs, lock new tabs/windows for a timed session, then restore your full workspace automatically.',
+    color: '#22c55e',
+  },
+  {
     icon: '💾',
     title: 'Real-time RAM tracking',
     desc: 'See exactly how much memory every tab is consuming, updated every 3 seconds.',
@@ -88,7 +94,13 @@ const SEO_STRUCTURED_DATA = {
   applicationCategory: 'BrowserApplication',
   operatingSystem: 'Chrome',
   description:
-    'TabMonitor is a Chrome side panel extension for focus and productivity. It provides live tab monitoring, tab manager controls, lightweight task manager support, and pomodoro-friendly workflows to reduce tab overload.',
+    'TabMonitor is a Chrome side panel extension for focus and productivity. It provides Focus Mode lock sessions, live tab monitoring, tab manager controls, lightweight task manager support, and pomodoro-friendly workflows to reduce tab overload.',
+  featureList: [
+    'Focus Mode lock that blocks opening new tabs and windows for a selected duration',
+    'Restore preserved tabs automatically after Focus Mode ends',
+    'Live RAM and CPU monitoring per tab',
+    'Tab suspension and one-click cleanup actions',
+  ],
   offers: {
     '@type': 'Offer',
     price: '0',
@@ -100,6 +112,38 @@ const SEO_STRUCTURED_DATA = {
     ratingCount: '2400',
   },
   url: 'https://www.tabmonitor.se',
+};
+
+
+const MOCK_TABS = [
+  { id: 1, title: 'YouTube — Lofi Study Beats', domain: 'youtube.com', mb: 847, cpu: 18.2, status: 'critical', winColor: '#3b82f6', favicon: '▶' },
+  { id: 2, title: 'Design System — Figma', domain: 'figma.com', mb: 512, cpu: 6.4, status: 'warning', winColor: '#3b82f6', favicon: '◈' },
+  { id: 3, title: 'Inbox — Gmail', domain: 'mail.google.com', mb: 203, cpu: 1.1, status: 'normal', winColor: '#22c55e', favicon: 'M' },
+  { id: 4, title: 'tabmonitor-web — VS Code', domain: 'github.dev', mb: 390, cpu: 4.8, status: 'warning', winColor: '#22c55e', favicon: '⌥' },
+  { id: 5, title: 'Hacker News', domain: 'news.ycombinator.com', mb: 78, cpu: 0.2, status: 'normal', winColor: '#22c55e', favicon: 'Y' },
+] as const;
+
+const FAQ_STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How does TabMonitor Focus Mode work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Choose tabs you want to preserve, start a timer, and TabMonitor blocks opening new tabs or windows until the timer ends. After the session, your full tab workspace is restored automatically.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is TabMonitor a good alternative to OneTab and Workona?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. TabMonitor combines tab performance monitoring with focus workflows, timed lock sessions, and cleanup actions in one side panel.',
+      },
+    },
+  ],
 };
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
@@ -119,15 +163,13 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 
 // ── Accurate Extension Mockup ─────────────────────────────
 function ExtensionMockup() {
-  const tabs = [
-    { title: 'YouTube — Lofi Study Beats', domain: 'youtube.com', mb: 847, cpu: 18.2, status: 'critical', winColor: '#3b82f6', favicon: '▶' },
-    { title: 'Design System — Figma', domain: 'figma.com', mb: 512, cpu: 6.4, status: 'warning', winColor: '#3b82f6', favicon: '◈' },
-    { title: 'Inbox — Gmail', domain: 'mail.google.com', mb: 203, cpu: 1.1, status: 'normal', winColor: '#22c55e', favicon: 'M' },
-    { title: 'tabmonitor-web — VS Code', domain: 'github.dev', mb: 390, cpu: 4.8, status: 'warning', winColor: '#22c55e', favicon: '⌥' },
-    { title: 'Hacker News', domain: 'news.ycombinator.com', mb: 78, cpu: 0.2, status: 'normal', winColor: '#22c55e', favicon: 'Y' },
-  ];
+  const [tabs, setTabs] = useState([...MOCK_TABS]);
+  const [preservedTabIds, setPreservedTabIds] = useState<number[]>([2, 3]);
+  const [isFocusModeActive, setIsFocusModeActive] = useState(false);
+  const [focusMinutes, setFocusMinutes] = useState(15);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
 
-  const totalMb = tabs.reduce((s, t) => s + t.mb, 0);
+  const totalMb = tabs.reduce((sum, tab) => sum + tab.mb, 0);
   const totalGb = (totalMb / 1024).toFixed(1);
 
   const statusColor: Record<string, string> = {
@@ -141,14 +183,63 @@ function ExtensionMockup() {
     normal: 'transparent',
   };
 
-  const iconFocus = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
-  const iconSleep = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+    const iconSleep = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
   const iconBin   = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>`;
 
-  const critCount = tabs.filter(t => t.status === 'critical').length;
-  const warnCount = tabs.filter(t => t.status === 'warning').length;
-  const normCount = tabs.filter(t => t.status === 'normal').length;
+  const critCount = tabs.filter(tab => tab.status === 'critical').length;
+  const warnCount = tabs.filter(tab => tab.status === 'warning').length;
+  const normCount = tabs.filter(tab => tab.status === 'normal').length;
   const maxMb = Math.max(...tabs.map(t => t.mb));
+
+  const togglePreservedTab = (id: number) => {
+    if (isFocusModeActive) return;
+    setPreservedTabIds(current => {
+      const hasId = current.includes(id);
+      if (hasId) return current.filter(tabId => tabId !== id);
+      return [...current, id];
+    });
+  };
+
+  const handleStartFocusMode = () => {
+    const selectedCount = preservedTabIds.length;
+    if (selectedCount === 0 || isFocusModeActive) return;
+
+    const preservedTabs = MOCK_TABS.filter(tab => preservedTabIds.includes(tab.id));
+    const durationInSeconds = focusMinutes * 60;
+
+    console.log('[Focus Mode] Starting session', {
+      preservedTabs: preservedTabs.map(tab => tab.title),
+      focusMinutes,
+      durationInSeconds,
+    });
+
+    setTabs(preservedTabs);
+    setRemainingSeconds(durationInSeconds);
+    setIsFocusModeActive(true);
+  };
+
+  useEffect(() => {
+    if (!isFocusModeActive || remainingSeconds <= 0) return;
+
+    const countdownTimer = window.setInterval(() => {
+      setRemainingSeconds(current => current - 1);
+    }, 1000);
+
+    return () => window.clearInterval(countdownTimer);
+  }, [isFocusModeActive, remainingSeconds]);
+
+  useEffect(() => {
+    if (!isFocusModeActive || remainingSeconds > 0) return;
+
+    console.log('[Focus Mode] Session completed. Restoring all tabs.');
+    setIsFocusModeActive(false);
+    setTabs([...MOCK_TABS]);
+  }, [isFocusModeActive, remainingSeconds]);
+
+  const remainingMinutes = Math.floor(remainingSeconds / 60)
+    .toString()
+    .padStart(2, '0');
+  const remainingSecs = (remainingSeconds % 60).toString().padStart(2, '0');
 
   return (
     <div style={{
@@ -166,6 +257,18 @@ function ExtensionMockup() {
       <div style={{ background: 'var(--panel-top)', padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 15, letterSpacing: '0.1em', color: 'var(--cyan)' }}>TabMonitor</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span
+            style={{
+              fontSize: 9,
+              color: isFocusModeActive ? '#22c55e' : '#4a5568',
+              border: `1px solid ${isFocusModeActive ? 'rgba(34,197,94,0.5)' : 'var(--border)'}`,
+              borderRadius: 10,
+              padding: '2px 6px',
+              fontFamily: 'monospace',
+            }}
+          >
+            {isFocusModeActive ? `FOCUS ${remainingMinutes}:${remainingSecs}` : 'READY'}
+          </span>
           <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'var(--cyan)', background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 4, padding: '2px 6px' }}>{totalGb} GB</span>
           <span style={{ fontSize: 16, cursor: 'pointer' }}>⚙</span>
         </div>
@@ -185,6 +288,32 @@ function ExtensionMockup() {
         ))}
       </div>
 
+      <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+          <span style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace', letterSpacing: '0.06em' }}>FOCUS MODE</span>
+          <input
+            type="number"
+            min={5}
+            max={90}
+            value={focusMinutes}
+            disabled={isFocusModeActive}
+            onChange={(event) => setFocusMinutes(Number(event.target.value) || 5)}
+            style={{ width: 46, padding: '2px 4px', borderRadius: 4, border: '1px solid var(--border)', background: 'transparent', color: '#e2e8f0', fontSize: 9 }}
+          />
+          <span style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>MIN</span>
+          <button
+            onClick={handleStartFocusMode}
+            disabled={isFocusModeActive || preservedTabIds.length === 0}
+            style={{ marginLeft: 'auto', padding: '3px 8px', borderRadius: 5, border: '1px solid rgba(34,197,94,0.4)', background: isFocusModeActive ? 'rgba(34,197,94,0.08)' : 'rgba(34,197,94,0.2)', color: '#22c55e', fontSize: 9, cursor: isFocusModeActive ? 'default' : 'pointer', fontFamily: 'inherit' }}
+          >
+            {isFocusModeActive ? 'Session active' : 'Start focus'}
+          </button>
+        </div>
+        <div style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>
+          Preserve tabs by toggling 🔒. While active, new tabs/windows are blocked in this demo.
+        </div>
+      </div>
+
       {/* Sort/filter bar */}
       <div style={{ padding: '4px 12px 6px', display: 'flex', gap: 4, alignItems: 'center' }}>
         <span style={{ fontSize: 9, color: '#4a5568', marginRight: 4, fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sort</span>
@@ -200,8 +329,9 @@ function ExtensionMockup() {
           const ramPct = Math.min((tab.mb / maxMb) * 100, 100);
           const cpuPct = Math.min(tab.cpu * 4, 100);
           const mbStr = tab.mb >= 1024 ? `${(tab.mb/1024).toFixed(2)} GB` : `${tab.mb} MB`;
+          const isPreserved = preservedTabIds.includes(tab.id);
           return (
-            <div key={i} style={{
+            <div key={tab.id} style={{
               background: statusBg[tab.status],
               borderBottom: i < tabs.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
               borderLeft: `2px solid ${tab.winColor}`,
@@ -215,7 +345,14 @@ function ExtensionMockup() {
                   <div style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>{tab.domain}</div>
                 </div>
                 <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
-                  {[iconFocus, iconSleep, iconBin].map((icon, j) => (
+                  <button
+                    onClick={() => togglePreservedTab(tab.id)}
+                    disabled={isFocusModeActive}
+                    style={{ width: 22, height: 22, borderRadius: 5, border: `1px solid ${isPreserved ? 'rgba(34,197,94,0.5)' : 'var(--border)'}`, background: isPreserved ? 'rgba(34,197,94,0.14)' : 'transparent', color: isPreserved ? '#22c55e' : '#4a5568', cursor: isFocusModeActive ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    🔒
+                  </button>
+                  {[iconSleep, iconBin].map((icon, j) => (
                     <button key={j} style={{ width: 22, height: 22, borderRadius: 5, border: '1px solid var(--border)', background: 'transparent', color: '#4a5568', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dangerouslySetInnerHTML={{ __html: icon }} />
                   ))}
                 </div>
@@ -245,7 +382,8 @@ function ExtensionMockup() {
       {/* Bottom action bar */}
       <div style={{ padding: '8px 12px', background: 'var(--panel-top)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 6 }}>
         <button style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 10, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>⚠ Close critical</button>
-        <button style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: '#8892a4', fontSize: 10, cursor: 'pointer', fontFamily: 'inherit' }}>↻ Refresh</button>
+        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: isFocusModeActive ? '#4a5568' : '#8892a4', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New tab</button>
+        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: isFocusModeActive ? '#4a5568' : '#8892a4', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New window</button>
       </div>
 
       {/* Tab navigation */}
@@ -281,6 +419,9 @@ export default function LandingPage() {
     <>
       <Script id="tabmonitor-seo-structured-data" type="application/ld+json">
         {JSON.stringify(SEO_STRUCTURED_DATA)}
+      </Script>
+      <Script id="tabmonitor-faq-structured-data" type="application/ld+json">
+        {JSON.stringify(FAQ_STRUCTURED_DATA)}
       </Script>
 
       <style>{`
@@ -647,7 +788,7 @@ export default function LandingPage() {
         <div className="section-inner">
           <p className="section-label">Features</p>
           <h2 className="section-title">Everything your browser<br />never told you</h2>
-          <p className="section-sub">Built for people who want focus and productivity: monitor every tab in real time, manage noisy sessions, and take action before Chrome slows down.</p>
+          <p className="section-sub">Built for people who want focus and productivity: monitor every tab in real time, run Focus Mode lock sessions, and take action before Chrome slows down. Compared to single-purpose tab tools, TabMonitor combines monitoring + focus in one panel.</p>
           <div className="features-grid">
             {FEATURES.map(f => (
               <div key={f.title} className="feature-card">

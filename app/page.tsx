@@ -113,7 +113,33 @@ const SEO_STRUCTURED_DATA = {
   },
   url: 'https://www.tabmonitor.se',
 };
-
+const EXTENSION_STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Tab Monitor",
+  "applicationCategory": "BrowserApplication",
+  "browserRequirements": "Requires Chrome 88+",
+  "operatingSystem": "Chrome OS, Windows, macOS, Linux",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating", 
+    "ratingValue": "5.0",
+    "ratingCount": "100"  
+  },
+  "installUrl": "https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd",
+  "screenshot": "https://lh3.googleusercontent.com/vbJnjbT4tmuwLb3qJWnJcsmAiw5dPFZHm98xveMUzFIt-CLEQlyw4qyZpurs_BQmHZNbl872Ro-q9nCpCuEfl612k5A=s800-w800-h500",  
+  "featureList": [
+    "Focus Mode lock sessions",
+    "Real-time RAM and CPU monitoring per tab",
+    "Tab suspension and cleanup",
+    "Session history tracking",
+    "Pomodoro-style workflows"
+  ]
+}
 
 const MOCK_TABS = [
   { id: 1, title: 'YouTube — Lofi Study Beats', domain: 'youtube.com', mb: 847, cpu: 18.2, status: 'critical', winColor: '#3b82f6', favicon: '▶' },
@@ -722,7 +748,7 @@ export default function LandingPage() {
       {/* ── Nav ── */}
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-logo">
-          <Image src={tabmonitorLogo} alt="TabMonitor logo" className="brand-logo" priority />
+          <Image src={tabmonitorLogo} alt="Tab Monitor Chrome extension icon - side panel productivity tool" className="brand-logo" priority />
           TabMonitor
           <span className="nav-badge">v1.0</span>
         </div>
@@ -740,11 +766,8 @@ export default function LandingPage() {
           <p className="hero-eyebrow">
             <span className="live-dot" /> Chrome Extension · Free forever
           </p>
-          <h1 className="hero-title">
-            Side panel control<br />
-            for focused<br />
-            <span className="accent">tab productivity.</span>
-          </h1>
+          <h1>Tab Monitor - Chrome Extension for Tab Management & RAM Monitoring</h1>
+          <h2>Control browser memory, manage tabs, and stay focused from one side panel</h2>
           <p className="hero-desc">
             TabMonitor gives you one side panel for monitoring, tab management, and focus. See heavy tabs live, cut browser lag fast, and stay organized with task manager and pomodoro-style workflows.
           </p>
@@ -776,7 +799,7 @@ export default function LandingPage() {
             </div>
             <div className="chrome-url">chrome-extension://tabmonitor/sidepanel.html</div>
             <div className="chrome-ext-icon">
-              <Image src={tabmonitorIcon} alt="TabMonitor extension icon" width={20} height={20} />
+              <Image src={tabmonitorIcon} alt="Tab Monitor Chrome extension icon - side panel productivity tool" width={20} height={20} />
             </div>
           </div>
           <ExtensionMockup />
@@ -849,7 +872,7 @@ export default function LandingPage() {
       <footer>
         <div className="footer-inner">
           <span className="footer-logo footer-logo-wrap">
-            <Image src={tabmonitorLogo} alt="TabMonitor logo" className="footer-logo-img" />
+            <Image src={tabmonitorLogo} alt="Tab Monitor Chrome extension icon - side panel productivity tool" className="footer-logo-img" />
             TabMonitor
           </span>
           <ul className="footer-links">

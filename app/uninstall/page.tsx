@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 const REASONS = [
@@ -19,28 +19,60 @@ function UninstallPage() {
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>('form');
   const [selected, setSelected]     = useState<string | null>(null);
+  const emailFromUrl = searchParams.get('email')?.trim() ?? '';
   const [detail, setDetail]         = useState('');
   const [rating, setRating]         = useState<number>(0);
+  const [email, setEmail]           = useState(emailFromUrl);
+  const [error, setError]           = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const emailFromUrl = searchParams.get('email');
+
+  const trimmedDetail = detail.trim();
+  const trimmedEmail = email.trim();
+  const isEmailValid = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail), [trimmedEmail]);
+  const isDetailValid = trimmedDetail.length >= 20;
 
   async function handleSubmit() {
     if (!selected) return;
+
+    if (!isEmailValid) {
+      console.log('[uninstall-page] blocked submit: invalid email', { emailLength: trimmedEmail.length });
+      setError('Please enter a valid email before submitting.');
+      return;
+    }
+
+    if (!isDetailValid) {
+      console.log('[uninstall-page] blocked submit: feedback too short', { detailLength: trimmedDetail.length });
+      setError('Please share at least 20 characters of feedback before submitting.');
+      return;
+    }
+
+    setError('');
     setSubmitting(true);
+
     try {
-      await fetch('/api/feedback/uninstall', {
+      const response = await fetch('/api/feedback/uninstall', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           reason: selected, 
-          details: detail.trim(),
+          details: trimmedDetail,
           rating: rating || null,
-          email: emailFromUrl,
+          email: trimmedEmail,
         }),
       });
-    } catch {}
-    setSubmitting(false);
-    setStep('submitted');
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.error || 'Failed to save feedback');
+      }
+
+      setStep('submitted');
+    } catch (err: any) {
+      console.error('[uninstall-page] Failed submitting feedback', err?.message || err);
+      setError(err?.message || 'Unable to save feedback. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -155,6 +187,21 @@ function UninstallPage() {
         }
         .detail-field:focus { border-color: rgba(0,212,255,0.3); }
         .detail-field::placeholder { color: var(--dim); }
+
+        .email-field {
+          min-height: 48px;
+          resize: none;
+        }
+
+        .field-help {
+          margin: -18px 0 22px;
+          color: var(--mid);
+          font-size: 12px;
+        }
+
+        .field-help.error {
+          color: #fca5a5;
+        }
 
         .rating-label {
           font-family: 'JetBrains Mono', monospace;
@@ -323,20 +370,43 @@ function UninstallPage() {
                 </div>
                 <div className="rating-help">Optional, but helpful for us.</div>
 
-                <label className="detail-label">Anything else you'd like to add? (optional)</label>
+                <label className="detail-label">Email</label>
+                <input
+                  className="detail-field email-field"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={e => {
+                    setEmail(e.target.value);
+                    if (error) setError('');
+                  }}
+                  maxLength={120}
+                />
+                <div className={`field-help ${trimmedEmail.length > 0 && !isEmailValid ? 'error' : ''}`}>
+                  Add your email so we can follow up if we need to clarify your feedback.
+                </div>
+
+                <label className="detail-label">Anything else you'd like to add?</label>
                 <textarea
                   className="detail-field"
-                  placeholder="Tell us more..."
+                  placeholder="Please share at least 20 characters so we can understand what went wrong."
                   value={detail}
-                  onChange={e => setDetail(e.target.value)}
+                  onChange={e => {
+                    setDetail(e.target.value);
+                    if (error) setError('');
+                  }}
                   maxLength={400}
                 />
+                <div className={`field-help ${trimmedDetail.length > 0 && !isDetailValid ? 'error' : ''}`}>
+                  {trimmedDetail.length}/20 characters minimum required.
+                </div>
+                {error && <div className="field-help error">{error}</div>}
               </div>
             )}
 
             <button
               className="btn-submit"
-              disabled={!selected || submitting}
+              disabled={!selected || submitting || !isEmailValid || !isDetailValid}
               onClick={handleSubmit}
             >
               {submitting

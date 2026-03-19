@@ -1,27 +1,43 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(req: Request) {
   try {
     const { reason, details, email, rating } = await req.json();
+    const normalizedDetails = typeof details === 'string' ? details.trim() : '';
+    const normalizedEmail = typeof email === 'string' ? email.toLowerCase().trim() : '';
     const parsedRating = typeof rating === 'number' && Number.isInteger(rating) && rating >= 1 && rating <= 5
       ? rating
       : null;
 
     console.log('[uninstall-feedback] payload', {
       hasReason: !!reason,
-      hasDetails: typeof details === 'string' && details.trim().length > 0,
-      hasEmail: !!email,
+      detailLength: normalizedDetails.length,
+      hasEmail: !!normalizedEmail,
       rating: parsedRating,
     });
+
+    if (!reason) {
+      return NextResponse.json({ error: 'A reason is required.' }, { status: 400 });
+    }
+
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      return NextResponse.json({ error: 'A valid email is required.' }, { status: 400 });
+    }
+
+    if (normalizedDetails.length < 20) {
+      return NextResponse.json({ error: 'Please provide at least 20 characters of feedback.' }, { status: 400 });
+    }
 
     const { error } = await supabaseAdmin
       .from('uninstall_feedback')
       .insert([
         { 
-          email: email?.toLowerCase().trim(), 
+          email: normalizedEmail, 
           reason, 
-          details,
+          details: normalizedDetails,
           rating: parsedRating,
         }
       ]);

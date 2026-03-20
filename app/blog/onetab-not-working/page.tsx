@@ -62,22 +62,11 @@ export const metadata: Metadata = {
 };
 
 function SectionHeading({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <h2
-      style={{
-        margin: '42px 0 16px',
-        fontSize: 34,
-        lineHeight: 1.1,
-        color: '#f8fafc',
-      }}
-    >
-      {children}
-    </h2>
-  );
+  return <h2 className="blog-section-heading">{children}</h2>;
 }
 
 function Paragraph({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <p style={{ margin: '0 0 18px', fontSize: 18, lineHeight: 1.8, color: '#cbd5e1' }}>{children}</p>;
+  return <p className="blog-paragraph">{children}</p>;
 }
 
 export default function OneTabNotWorkingPage() {
@@ -99,19 +88,96 @@ export default function OneTabNotWorkingPage() {
           font-family: 'DM Sans', sans-serif;
         }
         a { color: #67e8f9; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td {
+        .blog-section-heading {
+          margin: 42px 0 16px;
+          font-size: 34px;
+          line-height: 1.1;
+          color: #f8fafc;
+        }
+        .blog-paragraph {
+          margin: 0 0 18px;
+          font-size: 18px;
+          line-height: 1.8;
+          color: #cbd5e1;
+        }
+        .blog-benefits-list {
+          padding-left: 22px;
+          color: #cbd5e1;
+          font-size: 18px;
+          line-height: 1.8;
+        }
+        .blog-benefits-list li { margin-bottom: 12px; }
+        .blog-benefits-list li:last-child { margin-bottom: 0; }
+        .blog-comparison-table { border-collapse: collapse; width: 100%; }
+        .blog-comparison-table th, .blog-comparison-table td {
           padding: 16px;
           border-bottom: 1px solid rgba(148,163,184,0.16);
           vertical-align: top;
           text-align: left;
+          font-size: 16px;
+          line-height: 1.65;
         }
-        th {
+        .blog-comparison-table th {
           color: #f8fafc;
           background: rgba(15, 23, 42, 0.9);
           font-size: 14px;
           letter-spacing: 0.06em;
           text-transform: uppercase;
+        }
+        @media (max-width: 640px) {
+          .blog-article-shell {
+            padding: 24px 18px;
+            border-radius: 22px;
+          }
+          .blog-summary-cards {
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-top: 20px;
+          }
+          .blog-summary-card {
+            padding: 18px;
+            border-radius: 18px;
+          }
+          .blog-summary-card h2 {
+            font-size: 18px;
+          }
+          .blog-summary-card p,
+          .blog-paragraph,
+          .blog-benefits-list {
+            font-size: 15px;
+            line-height: 1.7;
+          }
+          .blog-section-heading {
+            margin: 34px 0 14px;
+            font-size: 26px;
+          }
+          .blog-hero-title {
+            font-size: clamp(2.4rem, 12vw, 3.4rem);
+            line-height: 0.98;
+          }
+          .blog-hero-lead {
+            font-size: 17px;
+            line-height: 1.65;
+          }
+          .blog-hero-support {
+            font-size: 15px;
+            line-height: 1.7;
+          }
+          .blog-table-shell {
+            margin: 0 -4px;
+            border-radius: 18px;
+          }
+          .blog-comparison-table {
+            min-width: 560px;
+          }
+          .blog-comparison-table th, .blog-comparison-table td {
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.55;
+          }
+          .blog-comparison-table th {
+            font-size: 11px;
+          }
         }
       `}</style>
       <main style={{ maxWidth: 1040, margin: '0 auto', padding: '88px 24px 72px' }}>
@@ -133,6 +199,7 @@ export default function OneTabNotWorkingPage() {
         </Link>
 
         <section
+          className="blog-article-shell"
           style={{
             border: '1px solid rgba(148,163,184,0.16)',
             borderRadius: 28,
@@ -160,6 +227,7 @@ export default function OneTabNotWorkingPage() {
           </div>
 
           <h1
+            className="blog-hero-title"
             style={{
               margin: '0 0 18px',
               fontFamily: "'Bebas Neue', sans-serif",
@@ -171,21 +239,21 @@ export default function OneTabNotWorkingPage() {
             OneTab not working properly? Here&apos;s why users are switching to Tab Monitor.
           </h1>
 
-          <p style={{ margin: '0 0 18px', color: '#cbd5e1', fontSize: 20, lineHeight: 1.75, maxWidth: 840 }}>
+          <p className="blog-hero-lead" style={{ margin: '0 0 18px', color: '#cbd5e1', fontSize: 20, lineHeight: 1.75, maxWidth: 840 }}>
             If you searched for <strong>“OneTab not working”</strong>, you are probably not just annoyed — you are worried about
             losing context, saved tabs, and momentum. Over the last month, many users have described a familiar pattern on
             community forums: tabs not restoring as expected, sessions feeling unreliable, and a general lack of visibility
             into what Chrome is doing right now.
           </p>
 
-          <p style={{ margin: 0, color: '#94a3b8', fontSize: 17, lineHeight: 1.8, maxWidth: 820 }}>
+          <p className="blog-hero-support" style={{ margin: 0, color: '#94a3b8', fontSize: 17, lineHeight: 1.8, maxWidth: 820 }}>
             This comparison post is written for those users. It takes inspiration from recurring Reddit-style complaints about
             reliability and missing control, then compares the <strong>OneTab workflow</strong> against a more active
             alternative: <strong>Tab Monitor</strong>.
           </p>
         </section>
 
-        <section style={{ display: 'grid', gap: 18, gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', marginTop: 28 }}>
+        <section className="blog-summary-cards" style={{ display: 'grid', gap: 18, gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', marginTop: 28 }}>
           {[
             ['What frustrates people', 'Saved-tab uncertainty, missing restores, and no live insight into what is slowing Chrome down.'],
             ['What Tab Monitor changes', 'You keep visibility into live tabs, see heavy resource use, and clean up without blindly collapsing everything.'],
@@ -193,6 +261,7 @@ export default function OneTabNotWorkingPage() {
           ].map(([title, copy]) => (
             <div
               key={title}
+              className="blog-summary-card"
               style={{
                 borderRadius: 22,
                 border: '1px solid rgba(148,163,184,0.14)',
@@ -227,6 +296,7 @@ export default function OneTabNotWorkingPage() {
 
           <SectionHeading>Tab Monitor vs OneTab: quick comparison</SectionHeading>
           <div
+            className="blog-table-shell"
             style={{
               overflowX: 'auto',
               borderRadius: 24,
@@ -234,7 +304,7 @@ export default function OneTabNotWorkingPage() {
               background: 'rgba(8, 15, 28, 0.88)',
             }}
           >
-            <table>
+            <table className="blog-comparison-table">
               <thead>
                 <tr>
                   <th>Feature</th>
@@ -271,19 +341,19 @@ export default function OneTabNotWorkingPage() {
           </Paragraph>
 
           <SectionHeading>Benefits of switching from OneTab to Tab Monitor</SectionHeading>
-          <ul style={{ paddingLeft: 22, color: '#cbd5e1', fontSize: 18, lineHeight: 1.8 }}>
-            <li style={{ marginBottom: 12 }}>
+          <ul className="blog-benefits-list">
+            <li>
               <strong>More confidence in your workflow:</strong> you keep more visibility into active tabs instead of hiding your
               workspace inside a restore list.
             </li>
-            <li style={{ marginBottom: 12 }}>
+            <li>
               <strong>Better performance decisions:</strong> live RAM and CPU insights help you spot the real problem tabs faster.
             </li>
-            <li style={{ marginBottom: 12 }}>
+            <li>
               <strong>Less context switching:</strong> preserve important tabs, suspend background tabs, and keep your working set
               cleaner without starting over.
             </li>
-            <li style={{ marginBottom: 12 }}>
+            <li>
               <strong>Built-in focus support:</strong> timed Focus Mode sessions give you a practical way to reduce distractions,
               not just store them away.
             </li>

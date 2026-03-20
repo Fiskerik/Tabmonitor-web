@@ -19,6 +19,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly' as const,
       priority: 0.5,
     },
+    {
+      path: '/blog',
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      path: '/blog/onetab-not-working',
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
   ];
 
   return routes.map(({ path, changeFrequency, priority }) => ({

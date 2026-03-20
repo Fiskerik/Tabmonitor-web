@@ -155,6 +155,35 @@ const MOCK_TABS = [
   { id: 5, title: 'Hacker News', domain: 'news.ycombinator.com', mb: 78, cpu: 0.2, status: 'normal', winColor: '#22c55e', favicon: 'Y' },
 ] as const;
 
+const SETTINGS_LOCALE = {
+  en: {
+    title: 'Settings',
+    subtitle: 'Soft theme preview · English locale',
+    sections: {
+      optionalFeatures: {
+        title: 'Optional features',
+        description: 'Toggle lightweight enhancements only when you need them.',
+        items: ['Soft theme', 'Compact metrics row', 'Focus reminders'],
+      },
+      activeDevices: {
+        title: 'Active devices',
+        description: 'Review browsers currently connected to your license.',
+        status: '2 of 3 devices active',
+      },
+      accountAndLicense: {
+        title: 'Account & license',
+        description: 'Signed in as hello@tabmonitor.se · Pro trial until Apr 2',
+        cta: 'Manage license',
+      },
+      proFeatures: {
+        title: 'Pro features',
+        description: 'Unlock reports, rules, and higher device limits whenever you are ready.',
+        cta: 'See Pro features',
+      },
+    },
+  },
+} as const;
+
 const FAQ_STRUCTURED_DATA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -200,6 +229,9 @@ function ExtensionMockup() {
   const [isFocusModeActive, setIsFocusModeActive] = useState(false);
   const [focusMinutes, setFocusMinutes] = useState(15);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [activeView, setActiveView] = useState<'tabs' | 'settings'>('tabs');
+
+  const locale = SETTINGS_LOCALE.en;
 
   const totalMb = tabs.reduce((sum, tab) => sum + tab.mb, 0);
   const totalGb = (totalMb / 1024).toFixed(1);
@@ -302,7 +334,25 @@ function ExtensionMockup() {
             {isFocusModeActive ? `FOCUS ${remainingMinutes}:${remainingSecs}` : 'READY'}
           </span>
           <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'var(--cyan)', background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 4, padding: '2px 6px' }}>{totalGb} GB</span>
-          <span style={{ fontSize: 16, cursor: 'pointer' }}>⚙</span>
+          <button
+            onClick={() => setActiveView((current) => current === 'tabs' ? 'settings' : 'tabs')}
+            aria-label={locale.title}
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: 8,
+              border: `1px solid ${activeView === 'settings' ? 'rgba(87,188,255,0.35)' : 'var(--border)'}` ,
+              background: activeView === 'settings' ? 'rgba(87,188,255,0.12)' : 'rgba(255,255,255,0.4)',
+              color: activeView === 'settings' ? 'var(--accent-strong)' : 'var(--text-mid)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 14,
+            }}
+          >
+            ⚙
+          </button>
         </div>
       </div>
 
@@ -322,7 +372,7 @@ function ExtensionMockup() {
 
       <div style={{ padding: '8px 12px', borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-          <span style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace', letterSpacing: '0.06em' }}>FOCUS MODE</span>
+          <span style={{ fontSize: 9, color: 'var(--text-dim)', fontFamily: 'monospace', letterSpacing: '0.06em' }}>FOCUS MODE</span>
           <input
             type="number"
             min={5}
@@ -330,9 +380,9 @@ function ExtensionMockup() {
             value={focusMinutes}
             disabled={isFocusModeActive}
             onChange={(event) => setFocusMinutes(Number(event.target.value) || 5)}
-            style={{ width: 46, padding: '2px 4px', borderRadius: 4, border: '1px solid var(--border)', background: 'transparent', color: '#e2e8f0', fontSize: 9 }}
+            style={{ width: 46, padding: '2px 4px', borderRadius: 4, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontSize: 9 }}
           />
-          <span style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>MIN</span>
+          <span style={{ fontSize: 9, color: 'var(--text-dim)', fontFamily: 'monospace' }}>MIN</span>
           <button
             onClick={handleStartFocusMode}
             disabled={isFocusModeActive || preservedTabIds.length === 0}
@@ -341,18 +391,20 @@ function ExtensionMockup() {
             {isFocusModeActive ? 'Session active' : 'Start focus'}
           </button>
         </div>
-        <div style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>
+        <div style={{ fontSize: 9, color: 'var(--text-dim)', fontFamily: 'monospace' }}>
           Preserve tabs by toggling 🔒. While active, new tabs/windows are blocked in this demo.
         </div>
       </div>
 
+      {activeView === 'tabs' ? (
+        <>
       {/* Sort/filter bar */}
       <div style={{ padding: '4px 12px 6px', display: 'flex', gap: 4, alignItems: 'center' }}>
-        <span style={{ fontSize: 9, color: '#4a5568', marginRight: 4, fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sort</span>
+        <span style={{ fontSize: 9, color: 'var(--text-dim)', marginRight: 4, fontFamily: 'monospace', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sort</span>
         {['RAM ↓', 'CPU', 'Idle'].map((s, i) => (
-          <button key={s} style={{ fontSize: 9, padding: '2px 7px', borderRadius: 4, border: i === 0 ? '1px solid var(--cyan)' : '1px solid var(--border)', background: i === 0 ? 'rgba(0,212,255,0.1)' : 'transparent', color: i === 0 ? 'var(--cyan)' : '#4a5568', cursor: 'pointer', fontFamily: 'inherit' }}>{s}</button>
+          <button key={s} style={{ fontSize: 9, padding: '2px 7px', borderRadius: 999, border: i === 0 ? '1px solid rgba(87,188,255,0.35)' : '1px solid var(--border)', background: i === 0 ? 'rgba(87,188,255,0.12)' : 'rgba(255,255,255,0.65)', color: i === 0 ? 'var(--accent-strong)' : 'var(--text-dim)', cursor: 'pointer', fontFamily: 'inherit' }}>{s}</button>
         ))}
-        <span style={{ marginLeft: 'auto', fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>{tabs.length} tabs</span>
+        <span style={{ marginLeft: 'auto', fontSize: 9, color: 'var(--text-dim)', fontFamily: 'monospace' }}>{tabs.length} tabs</span>
       </div>
 
       {/* Tab list */}
@@ -365,16 +417,16 @@ function ExtensionMockup() {
           return (
             <div key={tab.id} style={{
               background: statusBg[tab.status],
-              borderBottom: i < tabs.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+              borderBottom: i < tabs.length - 1 ? '1px solid rgba(122,145,173,0.18)' : 'none',
               borderLeft: `2px solid ${tab.winColor}`,
               padding: '8px 12px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                 <div style={{ width: 5, height: 5, borderRadius: '50%', background: statusColor[tab.status], flexShrink: 0 }} />
-                <div style={{ width: 16, height: 16, borderRadius: 4, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, color: '#8892a4', fontWeight: 700, flexShrink: 0 }}>{tab.favicon}</div>
+                <div style={{ width: 16, height: 16, borderRadius: 4, background: 'rgba(233,241,250,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, color: 'var(--text-mid)', fontWeight: 700, flexShrink: 0 }}>{tab.favicon}</div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 11, fontWeight: 500, color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tab.title}</div>
-                  <div style={{ fontSize: 9, color: '#4a5568', fontFamily: 'monospace' }}>{tab.domain}</div>
+                  <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tab.title}</div>
+                  <div style={{ fontSize: 9, color: 'var(--text-dim)', fontFamily: 'monospace' }}>{tab.domain}</div>
                 </div>
                 <div style={{ display: 'flex', gap: 3, flexShrink: 0 }}>
                   <button
@@ -385,22 +437,22 @@ function ExtensionMockup() {
                     🔒
                   </button>
                   {[iconSleep, iconBin].map((icon, j) => (
-                    <button key={j} style={{ width: 22, height: 22, borderRadius: 5, border: '1px solid var(--border)', background: 'transparent', color: '#4a5568', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dangerouslySetInnerHTML={{ __html: icon }} />
+                    <button key={j} style={{ width: 22, height: 22, borderRadius: 5, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-dim)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} dangerouslySetInnerHTML={{ __html: icon }} />
                   ))}
                 </div>
               </div>
               {/* Metric bars */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 8, color: '#4a5568', fontFamily: 'monospace', width: 20, textTransform: 'uppercase' }}>RAM</span>
-                  <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+                  <span style={{ fontSize: 8, color: 'var(--text-dim)', fontFamily: 'monospace', width: 20, textTransform: 'uppercase' }}>RAM</span>
+                  <div style={{ flex: 1, height: 3, background: 'rgba(122,145,173,0.12)', borderRadius: 2, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${ramPct}%`, background: tab.status === 'critical' ? '#ef4444' : tab.status === 'warning' ? '#f59e0b' : 'rgba(0,212,255,0.6)', borderRadius: 2, transition: 'width 0.4s' }} />
                   </div>
                   <span style={{ fontSize: 9, fontFamily: 'monospace', color: statusColor[tab.status], minWidth: 44, textAlign: 'right' }}>{mbStr}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 8, color: '#4a5568', fontFamily: 'monospace', width: 20, textTransform: 'uppercase' }}>CPU</span>
-                  <div style={{ flex: 1, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+                  <span style={{ fontSize: 8, color: 'var(--text-dim)', fontFamily: 'monospace', width: 20, textTransform: 'uppercase' }}>CPU</span>
+                  <div style={{ flex: 1, height: 3, background: 'rgba(122,145,173,0.12)', borderRadius: 2, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${cpuPct}%`, background: tab.cpu > 10 ? '#ff6b35' : 'rgba(167,139,250,0.6)', borderRadius: 2 }} />
                   </div>
                   <span style={{ fontSize: 9, fontFamily: 'monospace', color: tab.cpu > 10 ? '#ff6b35' : '#8892a4', minWidth: 44, textAlign: 'right' }}>{tab.cpu}%</span>
@@ -411,11 +463,45 @@ function ExtensionMockup() {
         })}
       </div>
 
+        </>
+      ) : (
+        <div style={{ padding: '12px', display: 'grid', gap: 10, background: 'linear-gradient(180deg, rgba(255,255,255,0.5), rgba(244,248,252,0.92))' }}>
+          <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.84)', border: '1px solid rgba(122,145,173,0.22)' }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>{locale.title}</div>
+            <div style={{ fontSize: 9, color: 'var(--text-dim)', marginTop: 3, fontFamily: 'monospace' }}>{locale.subtitle}</div>
+          </div>
+          {[
+            locale.sections.optionalFeatures,
+            locale.sections.activeDevices,
+            locale.sections.accountAndLicense,
+            locale.sections.proFeatures,
+          ].map((section) => (
+            <div key={section.title} style={{ padding: '11px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(122,145,173,0.22)', boxShadow: '0 10px 24px rgba(15,23,42,0.05)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--text)', letterSpacing: '0.02em' }}>{section.title}</div>
+                {'status' in section ? <span style={{ fontSize: 8, color: 'var(--accent-strong)', background: 'rgba(87,188,255,0.12)', borderRadius: 999, padding: '3px 6px', fontFamily: 'monospace' }}>{section.status}</span> : null}
+                {'cta' in section ? <span style={{ fontSize: 8, color: 'var(--accent-strong)', fontWeight: 700 }}>{section.cta}</span> : null}
+              </div>
+              <div style={{ fontSize: 9, color: 'var(--text-dim)', lineHeight: 1.5, marginTop: 5 }}>
+                {section.description}
+              </div>
+              {'items' in section ? (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                  {section.items.map((item) => (
+                    <span key={item} style={{ fontSize: 8, padding: '4px 7px', borderRadius: 999, background: 'rgba(233,241,250,0.95)', color: 'var(--text-dim)', border: '1px solid rgba(122,145,173,0.18)' }}>{item}</span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Bottom action bar */}
       <div style={{ padding: '8px 12px', background: 'var(--panel-top)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 6 }}>
         <button style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 10, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600 }}>⚠ Close critical</button>
-        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: isFocusModeActive ? '#4a5568' : '#8892a4', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New tab</button>
-        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: isFocusModeActive ? '#4a5568' : '#8892a4', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New window</button>
+        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'rgba(255,255,255,0.65)', color: isFocusModeActive ? 'var(--text-dim)' : 'var(--text-mid)', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New tab</button>
+        <button disabled={isFocusModeActive} style={{ flex: 1, padding: '6px', borderRadius: 7, border: '1px solid var(--border)', background: 'rgba(255,255,255,0.65)', color: isFocusModeActive ? 'var(--text-dim)' : 'var(--text-mid)', fontSize: 10, cursor: isFocusModeActive ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>+ New window</button>
       </div>
 
       {/* Tab navigation */}
@@ -462,18 +548,19 @@ export default function LandingPage() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:         #06090f;
-          --panel:      #0d1117;
-          --panel-top:  #080b14;
-          --border:     #1e2836;
-          --text:       #e2e8f0;
-          --text-mid:   #8892a4;
-          --text-dim:   #4a5568;
-          --cyan:       #00d4ff;
-          --purple:     #a78bfa;
-          --green:      #22c55e;
-          --orange:     #ff6b35;
-          --red:        #ef4444;
+          --bg:         #f5f7fb;
+          --panel:      rgba(255,255,255,0.86);
+          --panel-top:  rgba(244,248,252,0.96);
+          --border:     rgba(122,145,173,0.22);
+          --text:       #18212f;
+          --text-mid:   #506176;
+          --text-dim:   #6f8196;
+          --cyan:       #57bcff;
+          --purple:     #8d8cf8;
+          --green:      #1fa463;
+          --orange:     #e47a3f;
+          --red:        #dc5c5c;
+          --accent-strong: #1f6fb7;
         }
 
         body {
@@ -511,8 +598,8 @@ export default function LandingPage() {
           padding: 20px 48px; transition: all 0.3s;
         }
         .nav.scrolled {
-          background: rgba(6,9,15,0.9); backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 48px;
+          background: rgba(245,247,251,0.9); backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(122,145,173,0.18); padding: 14px 48px;
         }
         .nav-logo {
           font-family: 'Bebas Neue', sans-serif; font-size: 22px;
@@ -585,7 +672,7 @@ export default function LandingPage() {
           font-weight: 600; font-size: 15px; text-decoration: none;
           transition: all 0.2s; border: 1px solid var(--border); cursor: pointer;
         }
-        .btn-ghost:hover { border-color: #2a3444; background: rgba(255,255,255,0.03); }
+        .btn-ghost:hover { border-color: rgba(87,188,255,0.28); background: rgba(255,255,255,0.75); }
 
         /* ── Extension frame ── */
         .extension-frame {
@@ -593,16 +680,16 @@ export default function LandingPage() {
           /* Chrome extension frame */
         }
         .chrome-frame {
-          background: #1a1d2e; border-radius: 12px 12px 0 0;
-          padding: 10px 14px 0; border: 1px solid #2a3444; border-bottom: none;
+          background: rgba(233,239,247,0.96); border-radius: 12px 12px 0 0;
+          padding: 10px 14px 0; border: 1px solid rgba(122,145,173,0.24); border-bottom: none;
           display: flex; align-items: center; gap: 8px; margin-bottom: -1px;
         }
         .chrome-dots { display: flex; gap: 5px; }
         .chrome-dot { width: 9px; height: 9px; border-radius: 50%; }
         .chrome-url {
-          flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px;
+          flex: 1; background: rgba(255,255,255,0.78); border-radius: 999px;
           padding: 3px 10px; font-family: 'JetBrains Mono', monospace;
-          font-size: 9px; color: #4a5568; letter-spacing: 0.02em;
+          font-size: 9px; color: var(--text-dim); letter-spacing: 0.02em;
         }
         .chrome-ext-icon {
           width: 16px; height: 16px; border-radius: 3px;
@@ -648,7 +735,7 @@ export default function LandingPage() {
           border-radius: 16px; overflow: hidden;
         }
         .feature-card { background: var(--panel); padding: 32px; transition: background 0.2s; }
-        .feature-card:hover { background: #111820; }
+        .feature-card:hover { background: rgba(250,252,255,0.98); }
         .feature-icon { font-size: 26px; margin-bottom: 16px; display: block; }
         .feature-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
         .feature-desc { font-size: 13px; color: var(--text-dim); line-height: 1.65; }
@@ -660,10 +747,10 @@ export default function LandingPage() {
           background: var(--panel); border: 1px solid var(--border);
           border-radius: 16px; padding: 36px; position: relative; transition: all 0.2s;
         }
-        .pricing-card:hover { border-color: #2a3444; }
+        .pricing-card:hover { border-color: rgba(87,188,255,0.28); box-shadow: 0 12px 34px rgba(15,23,42,0.05); }
         .pricing-card.highlight {
           border-color: var(--cyan);
-          background: linear-gradient(135deg, var(--panel), #0d1a24);
+          background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(236,244,255,0.98));
         }
         .pricing-card.highlight::before {
           content: 'MOST POPULAR';
@@ -687,7 +774,7 @@ export default function LandingPage() {
         .plan-cta.primary { background: var(--cyan); color: var(--bg); }
         .plan-cta.primary:hover { background: #33dcff; transform: translateY(-1px); }
         .plan-cta.secondary { background: transparent; color: var(--text-mid); border: 1px solid var(--border); }
-        .plan-cta.secondary:hover { border-color: #2a3444; color: var(--text); }
+        .plan-cta.secondary:hover { border-color: rgba(87,188,255,0.28); color: var(--text); background: rgba(255,255,255,0.82); }
 
         /* ── Download ── */
         .download-section { background: linear-gradient(135deg, var(--panel-top), var(--panel)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -700,7 +787,7 @@ export default function LandingPage() {
           background: var(--text); color: var(--bg); padding: 16px 28px; border-radius: 12px;
           text-decoration: none; font-weight: 700; font-size: 15px; white-space: nowrap; transition: all 0.2s;
         }
-        .chrome-badge:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+        .chrome-badge:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,0.12); }
 
         /* ── Footer ── */
         .footer-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }

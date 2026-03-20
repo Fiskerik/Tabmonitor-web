@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Script from 'next/script';
 import tabmonitorLogo from '../logo.png';
 import tabmonitorIcon from '../icon48.png';
 
-const NAV_LINKS = ['Features', 'Pricing', 'Download'];
+const NAV_LINKS = [
+  { label: 'Features', href: '#features' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Download', href: '#download' },
+  { label: 'Blog', href: '/blog' },
+];
 
 const FEATURES = [
   {
@@ -753,7 +759,15 @@ export default function LandingPage() {
           <span className="nav-badge">v1.0</span>
         </div>
         <ul className="nav-links">
-          {NAV_LINKS.map(l => <li key={l}><a href={`#${l.toLowerCase()}`}>{l}</a></li>)}
+          {NAV_LINKS.map((link) => (
+            <li key={link.label}>
+              {link.href.startsWith('#') ? (
+                <a href={link.href}>{link.label}</a>
+              ) : (
+                <Link href={link.href}>{link.label}</Link>
+              )}
+            </li>
+          ))}
         </ul>
         <a href="https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd" className="nav-cta">
           Add to Chrome →

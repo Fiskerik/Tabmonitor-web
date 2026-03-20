@@ -977,6 +977,7 @@ export default function LandingPage() {
             TabMonitor
           </span>
           <ul className="footer-links">
+            <li><a href="/blog">Blog</a></li>
             <li><a href="/privacy">Privacy</a></li>
             <li><a href="/terms">Terms</a></li>
             <li><a href="mailto:eaconsulting.supp@gmail.com">Support</a></li>

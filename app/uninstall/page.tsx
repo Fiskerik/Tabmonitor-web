@@ -201,13 +201,16 @@ function UninstallPage() {
         }
 
         .card-title {
-          font-family: var(--display);
+          font-family: var(--body);
           font-size: 32px;
           font-weight: 800;
           line-height: 1.1;
-          letter-spacing: -0.01em;
+          letter-spacing: -0.02em;
           margin-bottom: 10px;
           color: var(--text);
+          text-wrap: balance;
+          font-feature-settings: "liga" 1, "kern" 1;
+          text-rendering: geometricPrecision;
         }
         .card-sub {
           font-size: 15px;

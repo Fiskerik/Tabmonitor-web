@@ -12,19 +12,42 @@ export default function TermsPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #06090f; color: #e2e8f0; font-family: 'DM Sans', sans-serif; }
+
+        :root {
+          --bg:         #f7f4fb;
+          --surface:    #fffdfd;
+          --border:     #e0d5ed;
+          --text:       #2f2a3c;
+          --muted:      #7a6f86;
+          --dim:        #9b8cad;
+          --accent:     #8a7cf3;
+          --section:    #f4f0fa;
+          --section-border: #ddd3eb;
+          --display:    'Syne', sans-serif;
+          --body:       'DM Sans', sans-serif;
+          --mono:       'DM Mono', monospace;
+        }
+
+        body {
+          background: var(--bg);
+          color: var(--text);
+          font-family: var(--body);
+          min-height: 100vh;
+        }
       `}</style>
-      <main style={{ maxWidth: 720, margin: '0 auto', padding: '120px 32px 80px', fontFamily: "'DM Sans', sans-serif" }}>
-        <a href="/" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#00d4ff', textDecoration: 'none', letterSpacing: '0.1em', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 48 }}>
+
+      <main style={{ maxWidth: 760, margin: '0 auto', padding: '120px 32px 80px', fontFamily: "'DM Sans', sans-serif" }}>
+        <a href="/" style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: '#8a7cf3', textDecoration: 'none', letterSpacing: '0.1em', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 44 }}>
           ← TABMONITOR
         </a>
 
-        <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 56, letterSpacing: '0.02em', marginBottom: 8, color: '#e2e8f0' }}>
+        <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 52, letterSpacing: '-0.02em', marginBottom: 10, color: '#2f2a3c', fontWeight: 800 }}>
           Terms of Service
         </h1>
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#4a5568', marginBottom: 56 }}>
+        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: '#9b8cad', marginBottom: 52 }}>
           Last updated: {new Date().toLocaleDateString('sv-SE')}
         </p>
 
@@ -78,12 +101,12 @@ export default function TermsPage() {
             content: `For questions about these terms, contact us at eaconsulting.supp@gmail.com.`,
           },
         ].map(({ title, content }) => (
-          <section key={title} style={{ marginBottom: 40, paddingBottom: 40, borderBottom: '1px solid #1e2836' }}>
-            <h2 style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 600, color: '#00d4ff', marginBottom: 12, letterSpacing: '0.05em' }}>
+          <section key={title} style={{ marginBottom: 24, padding: '26px 24px', border: '1px solid #ddd3eb', borderRadius: 18, background: '#f4f0fa' }}>
+            <h2 style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 600, color: '#8a7cf3', marginBottom: 12, letterSpacing: '0.05em' }}>
               {title}
             </h2>
             {content.split('\n\n').map((para, i) => (
-              <p key={i} style={{ fontSize: 15, color: '#8892a4', lineHeight: 1.8, marginBottom: 12 }}>
+              <p key={i} style={{ fontSize: 15, color: '#5f5470', lineHeight: 1.8, marginBottom: 12 }}>
                 {para}
               </p>
             ))}

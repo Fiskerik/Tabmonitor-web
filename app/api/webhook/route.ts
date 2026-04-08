@@ -118,27 +118,37 @@ export async function POST(req: Request) {
     }
 
     // ── customer.subscription.updated ──────────────────────────────────────
-    // Fires when trial converts to paid, or subscription changes
-    if (event.type === 'customer.subscription.updated') {
-      const activeStatuses = ['active', 'trialing'];
-      const isActive = activeStatuses.includes(data.status);
-      const trialEnd = data.trial_end ?? null;
+if (event.type === 'customer.subscription.updated') {
+  const activeStatuses = ['active', 'trialing'];
+  const isActive = activeStatuses.includes(data.status);
+  
+  // Hämta trial_end om det finns
+  const trialEnd = data.trial_end ?? null;
 
-      // Get customer email as fallback
-      let email: string | null = null;
-      try {
-        const customer = await stripe.customers.retrieve(data.customer) as Stripe.Customer;
-        email = customer.email;
-      } catch {}
+  // SÄKER HANTERING AV PERIOD END:
+  // Stripe skickar ibland period_end på toppnivå, ibland inuti items.
+  const rawPeriodEnd = data.current_period_end || data.items?.data[0]?.current_period_end;
 
-      await updateLicenseByCustomer(data.customer, email, {
-        is_active:            isActive,
-        plan:                 isActive ? 'pro' : 'free',
-        stripe_subscription_id: data.id,
-        current_period_end:   new Date(data.current_period_end * 1000).toISOString(),
-        trial_ends_at:        trialEnd ? new Date(trialEnd * 1000).toISOString() : null,
-      });
-    }
+  // Get customer email as fallback
+  let email: string | null = null;
+  try {
+    const customer = await stripe.customers.retrieve(data.customer) as Stripe.Customer;
+    email = customer.email;
+  } catch {}
+
+  await updateLicenseByCustomer(data.customer, email, {
+    is_active: isActive,
+    plan: isActive ? 'pro' : 'free',
+    stripe_subscription_id: data.id,
+    // Kontrollera att rawPeriodEnd faktiskt är en siffra innan konvertering
+    current_period_end: typeof rawPeriodEnd === 'number' 
+      ? new Date(rawPeriodEnd * 1000).toISOString() 
+      : null,
+    trial_ends_at: typeof trialEnd === 'number' 
+      ? new Date(trialEnd * 1000).toISOString() 
+      : null,
+  });
+}
 
     // ── customer.subscription.deleted ──────────────────────────────────────
     if (event.type === 'customer.subscription.deleted') {

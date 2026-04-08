@@ -106,7 +106,9 @@ export async function POST(req: Request) {
         is_active:            true,
         plan:                 'pro',
         stripe_subscription_id: subscriptionId,
-        current_period_end:   periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
+        current_period_end: data.current_period_end 
+          ? new Date(data.current_period_end * 1000).toISOString() 
+          : null,
         // Store trial end so the extension can show "Trial active until X"
         trial_ends_at:        trialEnd  ? new Date(trialEnd  * 1000).toISOString() : null,
         stripe_customer_id:   customerId, // ensure it's always stored

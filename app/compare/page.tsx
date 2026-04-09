@@ -1,3 +1,20 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Tab Monitor Comparison',
+  description: 'Compare Tab Monitor with OneTab, The Great Suspender, and Workona for tab management, tab hoarding control, multiple tabs, and focus workflows.',
+  keywords: [
+    'tab management',
+    'tab hoarding',
+    'multiple tabs',
+    'task manager',
+    'alt tab',
+    'OneTab alternative',
+    'Workona alternative',
+  ],
+  alternates: { canonical: '/compare' },
+};
+
 export default function ComparePage() {
   return (
     <table>

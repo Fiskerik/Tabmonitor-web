@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Read how Tab Monitor handles privacy, local data processing, billing data, and data retention.',
+  keywords: ['tab management', 'tab hoarding', 'multiple tabs', 'task manager', 'alt tab'],
   alternates: {
     canonical: '/privacy',
   },

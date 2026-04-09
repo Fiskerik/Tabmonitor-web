@@ -20,6 +20,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
+      path: '/compare',
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    },
+    {
+      path: '/feedback',
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
+    {
+      path: '/success',
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    },
+    {
+      path: '/uninstall',
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    },
+    {
       path: '/blog',
       changeFrequency: 'weekly' as const,
       priority: 0.8,

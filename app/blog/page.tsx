@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   title: 'Blog',
   description:
     'Read Tab Monitor articles about tab management, browser performance, focus workflows, and alternatives to Workona, OneTab, and Session Buddy.',
+  keywords: ['tab management', 'tab hoarding', 'multiple tabs', 'task manager', 'alt tab'],
   alternates: {
     canonical: '/blog',
   },

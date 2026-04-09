@@ -4,12 +4,13 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Payment Success',
   description: 'Your Tab Monitor payment was completed successfully. Return to the extension and unlock premium features.',
+  keywords: ['tab management', 'tab manager', 'multiple tabs', 'task manager', 'alt tab'],
   alternates: {
     canonical: '/success',
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

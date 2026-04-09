@@ -3,6 +3,14 @@ import Link from 'next/link';
 
 const posts = [
   {
+    slug: 'tab-monitor-vs-top-tab-tools',
+    title: 'Tab Monitor vs the Top 5 Tab Tools: Why It Wins for Focus and Speed',
+    description:
+      'A side-by-side comparison of Tab Monitor, Workona, OneTab, Session Buddy, Toby, and Tabli with a practical table for users deciding what to install next.',
+    category: 'Top tools',
+    readTime: '9 min read',
+  },
+  {
     slug: 'onetab-not-working',
     title: 'OneTab Not Working? Why More Chrome Users Are Switching to Tab Monitor',
     description:
@@ -15,7 +23,7 @@ const posts = [
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Read Tab Monitor articles about tab management, browser performance, focus workflows, and alternatives to OneTab.',
+    'Read Tab Monitor articles about tab management, browser performance, focus workflows, and alternatives to Workona, OneTab, and Session Buddy.',
   alternates: {
     canonical: '/blog',
   },

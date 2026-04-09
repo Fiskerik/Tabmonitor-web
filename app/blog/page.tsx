@@ -45,9 +45,9 @@ export default function BlogPage() {
         body {
           margin: 0;
           background:
-            radial-gradient(circle at top, rgba(0,212,255,0.15), transparent 30%),
-            linear-gradient(180deg, #06090f 0%, #08111d 45%, #06090f 100%);
-          color: #e2e8f0;
+            radial-gradient(circle at top, rgba(87,188,255,0.18), transparent 34%),
+            linear-gradient(180deg, #f5f7fb 0%, #eef4fb 50%, #f5f7fb 100%);
+          color: #18212f;
           font-family: 'DM Sans', sans-serif;
         }
         a { color: inherit; }
@@ -93,7 +93,7 @@ export default function BlogPage() {
         >
           Guides for calmer tabs and faster browsing
         </h1>
-        <p style={{ maxWidth: 720, margin: '0 0 40px', color: '#94a3b8', fontSize: 18, lineHeight: 1.7 }}>
+        <p style={{ maxWidth: 720, margin: '0 0 40px', color: '#506176', fontSize: 18, lineHeight: 1.7 }}>
           Explore practical advice on tab overload, browser slowdowns, focus sessions, and why people move from list-only
           tab savers to smarter workflow extensions.
         </p>
@@ -109,10 +109,10 @@ export default function BlogPage() {
               key={post.slug}
               style={{
                 border: '1px solid rgba(148,163,184,0.18)',
-                background: 'rgba(8, 15, 28, 0.9)',
+                background: 'rgba(255, 255, 255, 0.9)',
                 borderRadius: 24,
                 padding: 28,
-                boxShadow: '0 24px 80px rgba(2, 6, 23, 0.28)',
+                boxShadow: '0 24px 70px rgba(15, 23, 42, 0.08)',
               }}
             >
               <div
@@ -138,14 +138,14 @@ export default function BlogPage() {
                 >
                   {post.category}
                 </span>
-                <span style={{ color: '#64748b', fontSize: 14 }}>{post.readTime}</span>
+                <span style={{ color: '#6f8196', fontSize: 14 }}>{post.readTime}</span>
               </div>
               <h2 style={{ margin: '0 0 12px', fontSize: 34, lineHeight: 1.1 }}>
                 <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   {post.title}
                 </Link>
               </h2>
-              <p style={{ margin: '0 0 22px', color: '#94a3b8', fontSize: 17, lineHeight: 1.7 }}>{post.description}</p>
+              <p style={{ margin: '0 0 22px', color: '#506176', fontSize: 17, lineHeight: 1.7 }}>{post.description}</p>
               <Link
                 href={`/blog/${post.slug}`}
                 style={{

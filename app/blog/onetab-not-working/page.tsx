@@ -81,10 +81,10 @@ export default function OneTabNotWorkingPage() {
         body {
           margin: 0;
           background:
-            radial-gradient(circle at top, rgba(34,197,94,0.10), transparent 24%),
-            radial-gradient(circle at top right, rgba(0,212,255,0.10), transparent 28%),
-            linear-gradient(180deg, #050913 0%, #08101d 45%, #06090f 100%);
-          color: #e2e8f0;
+            radial-gradient(circle at top, rgba(34,197,94,0.09), transparent 26%),
+            radial-gradient(circle at top right, rgba(87,188,255,0.14), transparent 30%),
+            linear-gradient(180deg, #f5f7fb 0%, #edf4fc 45%, #f5f7fb 100%);
+          color: #18212f;
           font-family: 'DM Sans', sans-serif;
         }
         a { color: #67e8f9; }
@@ -92,17 +92,17 @@ export default function OneTabNotWorkingPage() {
           margin: 42px 0 16px;
           font-size: 34px;
           line-height: 1.1;
-          color: #f8fafc;
+          color: #18212f;
         }
         .blog-paragraph {
           margin: 0 0 18px;
           font-size: 18px;
           line-height: 1.8;
-          color: #cbd5e1;
+          color: #506176;
         }
         .blog-benefits-list {
           padding-left: 22px;
-          color: #cbd5e1;
+          color: #506176;
           font-size: 18px;
           line-height: 1.8;
         }
@@ -111,15 +111,15 @@ export default function OneTabNotWorkingPage() {
         .blog-comparison-table { border-collapse: collapse; width: 100%; }
         .blog-comparison-table th, .blog-comparison-table td {
           padding: 16px;
-          border-bottom: 1px solid rgba(148,163,184,0.16);
+          border-bottom: 1px solid rgba(122,145,173,0.2);
           vertical-align: top;
           text-align: left;
           font-size: 16px;
           line-height: 1.65;
         }
         .blog-comparison-table th {
-          color: #f8fafc;
-          background: rgba(15, 23, 42, 0.9);
+          color: #18212f;
+          background: rgba(233, 241, 250, 0.92);
           font-size: 14px;
           letter-spacing: 0.06em;
           text-transform: uppercase;
@@ -204,8 +204,8 @@ export default function OneTabNotWorkingPage() {
             border: '1px solid rgba(148,163,184,0.16)',
             borderRadius: 28,
             padding: '32px clamp(22px, 4vw, 46px)',
-            background: 'rgba(7, 14, 26, 0.88)',
-            boxShadow: '0 32px 80px rgba(2, 6, 23, 0.36)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            boxShadow: '0 26px 70px rgba(15, 23, 42, 0.08)',
           }}
         >
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
@@ -223,7 +223,7 @@ export default function OneTabNotWorkingPage() {
             >
               OneTab alternative
             </span>
-            <span style={{ color: '#64748b', fontSize: 14 }}>Updated March 19, 2026</span>
+            <span style={{ color: '#6f8196', fontSize: 14 }}>Updated March 19, 2026</span>
           </div>
 
           <h1
@@ -239,14 +239,14 @@ export default function OneTabNotWorkingPage() {
             OneTab not working properly? Here&apos;s why users are switching to Tab Monitor.
           </h1>
 
-          <p className="blog-hero-lead" style={{ margin: '0 0 18px', color: '#cbd5e1', fontSize: 20, lineHeight: 1.75, maxWidth: 840 }}>
+          <p className="blog-hero-lead" style={{ margin: '0 0 18px', color: '#506176', fontSize: 20, lineHeight: 1.75, maxWidth: 840 }}>
             If you searched for <strong>“OneTab not working”</strong>, you are probably not just annoyed — you are worried about
             losing context, saved tabs, and momentum. Over the last month, many users have described a familiar pattern on
             community forums: tabs not restoring as expected, sessions feeling unreliable, and a general lack of visibility
             into what Chrome is doing right now.
           </p>
 
-          <p className="blog-hero-support" style={{ margin: 0, color: '#94a3b8', fontSize: 17, lineHeight: 1.8, maxWidth: 820 }}>
+          <p className="blog-hero-support" style={{ margin: 0, color: '#6f8196', fontSize: 17, lineHeight: 1.8, maxWidth: 820 }}>
             This comparison post is written for those users. It takes inspiration from recurring Reddit-style complaints about
             reliability and missing control, then compares the <strong>OneTab workflow</strong> against a more active
             alternative: <strong>Tab Monitor</strong>.
@@ -265,12 +265,12 @@ export default function OneTabNotWorkingPage() {
               style={{
                 borderRadius: 22,
                 border: '1px solid rgba(148,163,184,0.14)',
-                background: 'rgba(8, 15, 28, 0.82)',
+                background: 'rgba(255, 255, 255, 0.9)',
                 padding: 22,
               }}
             >
-              <h2 style={{ margin: '0 0 10px', fontSize: 20, color: '#f8fafc' }}>{title}</h2>
-              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: '#94a3b8' }}>{copy}</p>
+              <h2 style={{ margin: '0 0 10px', fontSize: 20, color: '#18212f' }}>{title}</h2>
+              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: '#506176' }}>{copy}</p>
             </div>
           ))}
         </section>
@@ -301,7 +301,7 @@ export default function OneTabNotWorkingPage() {
               overflowX: 'auto',
               borderRadius: 24,
               border: '1px solid rgba(148,163,184,0.16)',
-              background: 'rgba(8, 15, 28, 0.88)',
+              background: 'rgba(255, 255, 255, 0.9)',
             }}
           >
             <table className="blog-comparison-table">
@@ -315,9 +315,9 @@ export default function OneTabNotWorkingPage() {
               <tbody>
                 {comparisonRows.map(([feature, tabMonitor, oneTab]) => (
                   <tr key={feature}>
-                    <td style={{ color: '#f8fafc', fontWeight: 700 }}>{feature}</td>
-                    <td style={{ color: '#cbd5e1' }}>{tabMonitor}</td>
-                    <td style={{ color: '#cbd5e1' }}>{oneTab}</td>
+                    <td style={{ color: '#18212f', fontWeight: 700 }}>{feature}</td>
+                    <td style={{ color: '#506176' }}>{tabMonitor}</td>
+                    <td style={{ color: '#506176' }}>{oneTab}</td>
                   </tr>
                 ))}
               </tbody>

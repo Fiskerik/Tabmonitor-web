@@ -139,10 +139,10 @@ export default function TopTabToolsComparisonPage() {
         body {
           margin: 0;
           background:
-            radial-gradient(circle at top left, rgba(0,212,255,0.09), transparent 28%),
-            radial-gradient(circle at top right, rgba(34,197,94,0.08), transparent 28%),
-            linear-gradient(180deg, #050913 0%, #08101d 45%, #06090f 100%);
-          color: #e2e8f0;
+            radial-gradient(circle at top left, rgba(87,188,255,0.12), transparent 30%),
+            radial-gradient(circle at top right, rgba(34,197,94,0.08), transparent 30%),
+            linear-gradient(180deg, #f5f7fb 0%, #edf4fc 45%, #f5f7fb 100%);
+          color: #18212f;
           font-family: 'DM Sans', sans-serif;
         }
         .blog-shell { max-width: 1120px; margin: 0 auto; padding: 88px 24px 72px; }
@@ -150,20 +150,20 @@ export default function TopTabToolsComparisonPage() {
           overflow-x: auto;
           border: 1px solid rgba(148,163,184,0.16);
           border-radius: 22px;
-          background: rgba(8, 15, 28, 0.88);
+          background: rgba(255, 255, 255, 0.9);
         }
         .comparison-table { border-collapse: collapse; min-width: 1080px; width: 100%; }
         .comparison-table th, .comparison-table td {
           padding: 14px;
-          border-bottom: 1px solid rgba(148,163,184,0.16);
+          border-bottom: 1px solid rgba(122,145,173,0.2);
           text-align: left;
           vertical-align: top;
           line-height: 1.6;
           font-size: 15px;
         }
         .comparison-table th {
-          background: rgba(15, 23, 42, 0.9);
-          color: #f8fafc;
+          background: rgba(233, 241, 250, 0.92);
+          color: #18212f;
           letter-spacing: 0.06em;
           font-size: 11px;
           text-transform: uppercase;
@@ -193,19 +193,19 @@ export default function TopTabToolsComparisonPage() {
             border: '1px solid rgba(148,163,184,0.16)',
             borderRadius: 28,
             padding: '32px clamp(22px, 4vw, 46px)',
-            background: 'rgba(7, 14, 26, 0.88)',
-            boxShadow: '0 32px 80px rgba(2, 6, 23, 0.36)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            boxShadow: '0 26px 70px rgba(15, 23, 42, 0.08)',
           }}
         >
           <h1 style={{ margin: '0 0 14px', fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(3.2rem, 8vw, 5.8rem)', lineHeight: 0.95, letterSpacing: '0.04em' }}>
             Tab Monitor vs the top 5 tab tools: why Tab Monitor wins for real-world productivity
           </h1>
-          <p style={{ margin: '0 0 16px', fontSize: 20, lineHeight: 1.75, color: '#cbd5e1', maxWidth: 880 }}>
+          <p style={{ margin: '0 0 16px', fontSize: 20, lineHeight: 1.75, color: '#506176', maxWidth: 880 }}>
             If you are comparing <strong>Workona vs OneTab vs Session Buddy</strong>, you are likely trying to solve the same daily problem:
             too many tabs, slower Chrome, and a workflow that breaks focus. The biggest difference in 2026 is simple:
             <strong> Tab Monitor is built for active control</strong>, not just passive storage.
           </p>
-          <p style={{ margin: 0, fontSize: 17, lineHeight: 1.8, color: '#94a3b8', maxWidth: 900 }}>
+          <p style={{ margin: 0, fontSize: 17, lineHeight: 1.8, color: '#6f8196', maxWidth: 900 }}>
             In this guide, we compare Tab Monitor to five popular choices — <strong>Workona, OneTab, Session Buddy, Toby, and Tabli</strong> —
             and show where each tool fits. For overloaded tab workflows, Tab Monitor consistently delivers the fastest path back to focus and browser speed.
           </p>
@@ -229,7 +229,7 @@ export default function TopTabToolsComparisonPage() {
               <tbody>
                 {comparisonRows.map((row) => (
                   <tr key={row.feature}>
-                    <td style={{ fontWeight: 700, color: '#f8fafc' }}>{row.feature}</td>
+                    <td style={{ fontWeight: 700, color: '#18212f' }}>{row.feature}</td>
                     <td style={{ color: '#86efac' }}>{row.tabMonitor}</td>
                     <td>{row.workona}</td>
                     <td>{row.oneTab}</td>
@@ -245,7 +245,7 @@ export default function TopTabToolsComparisonPage() {
 
         <section style={{ maxWidth: 900, marginTop: 34 }}>
           <h2 style={{ margin: '0 0 14px', fontSize: 34, lineHeight: 1.1 }}>Why Tab Monitor excels</h2>
-          <ul style={{ margin: 0, paddingLeft: 24, color: '#cbd5e1', lineHeight: 1.85, fontSize: 18 }}>
+          <ul style={{ margin: 0, paddingLeft: 24, color: '#506176', lineHeight: 1.85, fontSize: 18 }}>
             <li><strong>Monitoring-first design:</strong> You see memory and CPU pressure before your browser becomes unusable.</li>
             <li><strong>Focus-first workflow:</strong> Timed lock sessions stop new-tab drift while preserving your essential work context.</li>
             <li><strong>Action-first controls:</strong> Suspend and cleanup actions are immediate, so performance recovery is fast.</li>
@@ -255,12 +255,12 @@ export default function TopTabToolsComparisonPage() {
 
         <section style={{ maxWidth: 900, marginTop: 34 }}>
           <h2 style={{ margin: '0 0 14px', fontSize: 34, lineHeight: 1.1 }}>Who each tool is best for</h2>
-          <p style={{ margin: '0 0 16px', color: '#cbd5e1', fontSize: 18, lineHeight: 1.8 }}>
+          <p style={{ margin: '0 0 16px', color: '#506176', fontSize: 18, lineHeight: 1.8 }}>
             Workona and Toby are strong choices if your priority is workspace planning. Session Buddy is excellent for restore-heavy scenarios.
             OneTab and Tabli remain good lightweight options for minimal tab storage.
             But if your goal is <strong>fewer slowdowns, less tab chaos, and tighter focus</strong>, Tab Monitor is the most complete fit.
           </p>
-          <p style={{ margin: 0, color: '#94a3b8', fontSize: 17, lineHeight: 1.8 }}>
+          <p style={{ margin: 0, color: '#6f8196', fontSize: 17, lineHeight: 1.8 }}>
             Explore more comparisons in the <Link href="/blog" style={{ color: '#67e8f9' }}>Tab Monitor blog</Link>, or jump directly to the
             <Link href="/blog/onetab-not-working" style={{ color: '#67e8f9' }}> OneTab alternative guide</Link>.
           </p>

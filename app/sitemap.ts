@@ -29,6 +29,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
+    {
+      path: '/blog/tab-monitor-vs-top-tab-tools',
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
   ];
 
   return routes.map(({ path, changeFrequency, priority }) => ({

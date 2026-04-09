@@ -790,7 +790,7 @@ export default function LandingPage() {
         .chrome-badge:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,23,42,0.12); }
 
         /* ── Footer ── */
-        .footer-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: flex-start; justify-content: space-between; gap: 36px; }
         .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.1em; color: var(--text-dim); }
         .footer-logo-wrap {
           display: flex;
@@ -803,9 +803,39 @@ export default function LandingPage() {
           border-radius: 50%;
           opacity: 0.8;
         }
+        .footer-nav { display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
         .footer-links { display: flex; gap: 24px; list-style: none; }
         .footer-links a { font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: #4a5568; }
+        .footer-blogposts {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 12px;
+          list-style: none;
+        }
+        .footer-blogposts-label {
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          font-family: 'JetBrains Mono', monospace;
+          color: #6b7280;
+        }
+        .footer-blogposts a {
+          font-size: 12px;
+          color: #94a3b8;
+          text-decoration: none;
+          border: 1px solid var(--border);
+          border-radius: 999px;
+          padding: 6px 10px;
+          transition: all 0.2s;
+        }
+        .footer-blogposts a:hover {
+          color: #e2e8f0;
+          border-color: rgba(0,212,255,0.35);
+          background: rgba(0,212,255,0.08);
+        }
 
         /* ── Divider line ── */
         .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); max-width: 1200px; margin: 0 auto; }
@@ -830,7 +860,9 @@ export default function LandingPage() {
           .hero-buttons { width: 100%; }
           .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
           .download-inner { grid-template-columns: 1fr; gap: 28px; }
-          .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+          .footer-inner { flex-direction: column; gap: 20px; text-align: center; align-items: center; }
+          .footer-nav { align-items: center; }
+          .footer-blogposts { justify-content: center; }
         }
       `}</style>
 
@@ -976,13 +1008,20 @@ export default function LandingPage() {
             <Image src={tabmonitorLogo} alt="Tab Monitor Chrome extension icon - side panel productivity tool" className="footer-logo-img" />
             TabMonitor
           </span>
-          <ul className="footer-links">
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/privacy">Privacy</a></li>
-            <li><a href="/terms">Terms</a></li>
-            <li><a href="mailto:eaconsulting.supp@gmail.com">Support</a></li>
-            <li><a href="/uninstall">Uninstall</a></li>
-          </ul>
+          <div className="footer-nav">
+            <ul className="footer-links">
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/privacy">Privacy</a></li>
+              <li><a href="/terms">Terms</a></li>
+              <li><a href="mailto:eaconsulting.supp@gmail.com">Support</a></li>
+              <li><a href="/uninstall">Uninstall</a></li>
+            </ul>
+            <ul className="footer-blogposts">
+              <li className="footer-blogposts-label">Blog posts</li>
+              <li><a href="/blog/tab-monitor-vs-top-tab-tools">Top 5 tab tools</a></li>
+              <li><a href="/blog/onetab-not-working">OneTab alternative</a></li>
+            </ul>
+          </div>
         </div>
       </footer>
     </>

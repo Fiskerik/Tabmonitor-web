@@ -56,6 +56,7 @@ export async function POST(req: Request) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/success`,
       cancel_url: `${origin}/`,
+       allow_promotion_codes: true,
     });
 
     return NextResponse.json({ url: session.url });

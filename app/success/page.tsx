@@ -32,16 +32,16 @@ export default function SuccessPage() {
             </div>
 
             <p className="mb-3 font-['DM_Mono',monospace] text-xs font-semibold uppercase tracking-[0.18em] text-[#57bcff]">Tab Monitor Pro</p>
-            <h1 className="mb-4 font-['Syne',sans-serif] text-3xl font-extrabold tracking-[-0.02em] text-[#18212f]">Betalningen klar!</h1>
+            <h1 className="mb-4 font-['Syne',sans-serif] text-3xl font-extrabold tracking-[-0.02em] text-[#18212f]">Payment complete!</h1>
             <p className="mb-8 leading-relaxed text-[#506176]">
-              Tack för ditt förtroende. Du kan nu öppna din extension och börja använda premium-funktionerna direkt.
+              Thanks for your purchase. You can now open your extension and start using premium features right away.
             </p>
 
             <Link
               href="/"
               className="inline-flex items-center justify-center rounded-xl border border-[rgba(122,145,173,0.22)] bg-[rgba(255,255,255,0.82)] px-5 py-2.5 text-sm font-semibold text-[#1f6fb7] transition-colors hover:border-[rgba(87,188,255,0.36)] hover:bg-[rgba(255,255,255,0.96)]"
             >
-              Gå tillbaka till startsidan
+              Go back to homepage
             </Link>
           </div>
         </section>

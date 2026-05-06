@@ -3,6 +3,14 @@ import Link from 'next/link';
 
 const posts = [
   {
+    slug: 'chrome-tabs-using-too-much-memory',
+    title: 'Chrome Tabs Using Too Much Memory? How to Find and Fix Heavy Tabs',
+    description:
+      'A practical guide to reducing Chrome memory usage with live tab visibility, safer cleanup decisions, and focus controls that prevent tab overload from returning.',
+    category: 'Performance',
+    readTime: '8 min read',
+  },
+  {
     slug: 'tab-monitor-vs-top-tab-tools',
     title: 'Tab Monitor vs the Top 5 Tab Tools: Why It Wins for Focus and Speed',
     description:

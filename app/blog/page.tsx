@@ -48,7 +48,7 @@ export default function BlogPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         body {
           margin: 0;
@@ -93,10 +93,12 @@ export default function BlogPage() {
         <h1
           style={{
             margin: '0 0 14px',
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: 'clamp(3.4rem, 7vw, 5.4rem)',
-            letterSpacing: '0.04em',
-            lineHeight: 0.95,
+            maxWidth: 780,
+            fontSize: 'clamp(2.35rem, 5vw, 4.1rem)',
+            fontWeight: 800,
+            letterSpacing: '-0.055em',
+            lineHeight: 1.08,
+            textWrap: 'balance',
           }}
         >
           Guides for calmer tabs and faster browsing
@@ -148,7 +150,7 @@ export default function BlogPage() {
                 </span>
                 <span style={{ color: '#6f8196', fontSize: 14 }}>{post.readTime}</span>
               </div>
-              <h2 style={{ margin: '0 0 12px', fontSize: 34, lineHeight: 1.1 }}>
+              <h2 style={{ margin: '0 0 12px', fontSize: 'clamp(1.55rem, 2.6vw, 2.05rem)', fontWeight: 800, lineHeight: 1.18, letterSpacing: '-0.035em' }}>
                 <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                   {post.title}
                 </Link>

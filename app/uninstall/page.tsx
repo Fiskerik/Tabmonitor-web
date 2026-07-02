@@ -140,9 +140,9 @@ function UninstallPage() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           overflow-x: hidden;
-          padding: 24px 16px;
+          padding: clamp(42px, 8vh, 88px) 16px 32px;
         }
 
         body::before {
@@ -164,12 +164,12 @@ function UninstallPage() {
           position: relative;
           z-index: 1;
           width: 100%;
-          max-width: 540px;
+          max-width: 520px;
           background: var(--surface);
           border: 1px solid var(--border);
-          border-radius: 18px;
-          padding: 44px 40px;
-          box-shadow: 0 28px 80px rgba(15,23,42,0.12), 0 0 60px rgba(0,212,255,0.08);
+          border-radius: 20px;
+          padding: 36px 34px;
+          box-shadow: 0 24px 70px rgba(15,23,42,0.10), 0 0 50px rgba(0,212,255,0.06);
         }
 
         /* ── Header ── */
@@ -177,10 +177,10 @@ function UninstallPage() {
           font-family: var(--display);
           font-size: 15px;
           font-weight: 800;
-          letter-spacing: 0.08em;
-          color: var(--cyan);
-          text-transform: uppercase;
-          margin-bottom: 32px;
+          letter-spacing: -0.01em;
+          color: var(--purple);
+          text-transform: none;
+          margin-bottom: 26px;
           display: flex;
           align-items: center;
           gap: 8px;
@@ -189,16 +189,16 @@ function UninstallPage() {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: var(--cyan);
+          background: var(--green);
           opacity: 0.8;
         }
 
         .card-title {
           font-family: var(--body);
-          font-size: 30px;
+          font-size: 28px;
           font-weight: 800;
-          line-height: 1.1;
-          letter-spacing: -0.02em;
+          line-height: 1.12;
+          letter-spacing: -0.04em;
           margin-bottom: 10px;
           color: var(--text);
           text-wrap: balance;
@@ -206,17 +206,17 @@ function UninstallPage() {
           text-rendering: geometricPrecision;
         }
         .card-sub {
-          font-size: 15px;
+          font-size: 14px;
           color: var(--mid);
-          line-height: 1.65;
-          margin-bottom: 32px;
+          line-height: 1.6;
+          margin-bottom: 28px;
         }
 
         /* ── Step dots ── */
         .step-dots {
           display: flex;
           gap: 5px;
-          margin-bottom: 28px;
+          margin-bottom: 24px;
         }
         .dot {
           height: 3px;

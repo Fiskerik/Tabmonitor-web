@@ -134,7 +134,7 @@ export default function TopTabToolsComparisonPage() {
         {JSON.stringify(faqJsonLd)}
       </Script>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         body {
           margin: 0;
@@ -197,10 +197,10 @@ export default function TopTabToolsComparisonPage() {
             boxShadow: '0 26px 70px rgba(15, 23, 42, 0.08)',
           }}
         >
-          <h1 style={{ margin: '0 0 14px', fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(3.2rem, 8vw, 5.8rem)', lineHeight: 0.95, letterSpacing: '0.04em' }}>
+          <h1 style={{ margin: '0 0 16px', maxWidth: 980, fontSize: 'clamp(2.4rem, 5vw, 4.25rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.055em', textWrap: 'balance' }}>
             Tab Monitor vs the top 5 tab tools: why Tab Monitor wins for real-world productivity
           </h1>
-          <p style={{ margin: '0 0 16px', fontSize: 20, lineHeight: 1.75, color: '#506176', maxWidth: 880 }}>
+          <p style={{ margin: '0 0 16px', fontSize: 18, lineHeight: 1.7, color: '#506176', maxWidth: 880 }}>
             If you are comparing <strong>Workona vs OneTab vs Session Buddy</strong>, you are likely trying to solve the same daily problem:
             too many tabs, slower Chrome, and a workflow that breaks focus. The biggest difference in 2026 is simple:
             <strong> Tab Monitor is built for active control</strong>, not just passive storage.
@@ -212,7 +212,7 @@ export default function TopTabToolsComparisonPage() {
         </article>
 
         <section style={{ marginTop: 30 }}>
-          <h2 style={{ margin: '0 0 14px', fontSize: 36, lineHeight: 1.1 }}>Comparison table: Tab Monitor vs top alternatives</h2>
+          <h2 style={{ margin: '0 0 14px', fontSize: 'clamp(1.55rem, 2.4vw, 2.15rem)', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.035em' }}>Comparison table: Tab Monitor vs top alternatives</h2>
           <div className="table-shell">
             <table className="comparison-table">
               <thead>
@@ -244,7 +244,7 @@ export default function TopTabToolsComparisonPage() {
         </section>
 
         <section style={{ maxWidth: 900, marginTop: 34 }}>
-          <h2 style={{ margin: '0 0 14px', fontSize: 34, lineHeight: 1.1 }}>Why Tab Monitor excels</h2>
+          <h2 style={{ margin: '0 0 14px', fontSize: 'clamp(1.55rem, 2.4vw, 2.15rem)', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.035em' }}>Why Tab Monitor excels</h2>
           <ul style={{ margin: 0, paddingLeft: 24, color: '#506176', lineHeight: 1.85, fontSize: 18 }}>
             <li><strong>Monitoring-first design:</strong> You see memory and CPU pressure before your browser becomes unusable.</li>
             <li><strong>Focus-first workflow:</strong> Timed lock sessions stop new-tab drift while preserving your essential work context.</li>
@@ -254,7 +254,7 @@ export default function TopTabToolsComparisonPage() {
         </section>
 
         <section style={{ maxWidth: 900, marginTop: 34 }}>
-          <h2 style={{ margin: '0 0 14px', fontSize: 34, lineHeight: 1.1 }}>Who each tool is best for</h2>
+          <h2 style={{ margin: '0 0 14px', fontSize: 'clamp(1.55rem, 2.4vw, 2.15rem)', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.035em' }}>Who each tool is best for</h2>
           <p style={{ margin: '0 0 16px', color: '#506176', fontSize: 18, lineHeight: 1.8 }}>
             Workona and Toby are strong choices if your priority is workspace planning. Session Buddy is excellent for restore-heavy scenarios.
             OneTab and Tabli remain good lightweight options for minimal tab storage.

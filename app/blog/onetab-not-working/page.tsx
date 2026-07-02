@@ -76,7 +76,7 @@ export default function OneTabNotWorkingPage() {
         {JSON.stringify(articleJsonLd)}
       </Script>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         body {
           margin: 0;
@@ -90,9 +90,12 @@ export default function OneTabNotWorkingPage() {
         a { color: #67e8f9; }
         .blog-section-heading {
           margin: 42px 0 16px;
-          font-size: 34px;
-          line-height: 1.1;
+          font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+          font-weight: 800;
+          line-height: 1.2;
+          letter-spacing: -0.035em;
           color: #18212f;
+          text-wrap: balance;
         }
         .blog-paragraph {
           margin: 0 0 18px;
@@ -149,11 +152,11 @@ export default function OneTabNotWorkingPage() {
           }
           .blog-section-heading {
             margin: 34px 0 14px;
-            font-size: 26px;
+            font-size: 24px;
           }
           .blog-hero-title {
-            font-size: clamp(2.4rem, 12vw, 3.4rem);
-            line-height: 0.98;
+            font-size: clamp(2.1rem, 10vw, 3rem);
+            line-height: 1.08;
           }
           .blog-hero-lead {
             font-size: 17px;
@@ -230,16 +233,18 @@ export default function OneTabNotWorkingPage() {
             className="blog-hero-title"
             style={{
               margin: '0 0 18px',
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 'clamp(3.6rem, 8vw, 6rem)',
-              lineHeight: 0.95,
-              letterSpacing: '0.04em',
+              maxWidth: 980,
+              fontSize: 'clamp(2.4rem, 5vw, 4.25rem)',
+              fontWeight: 800,
+              lineHeight: 1.08,
+              letterSpacing: '-0.055em',
+              textWrap: 'balance',
             }}
           >
             OneTab not working properly? Here&apos;s why users are switching to Tab Monitor.
           </h1>
 
-          <p className="blog-hero-lead" style={{ margin: '0 0 18px', color: '#506176', fontSize: 20, lineHeight: 1.75, maxWidth: 840 }}>
+          <p className="blog-hero-lead" style={{ margin: '0 0 18px', color: '#506176', fontSize: 18, lineHeight: 1.7, maxWidth: 840 }}>
             If you searched for <strong>“OneTab not working”</strong>, you are probably not just annoyed — you are worried about
             losing context, saved tabs, and momentum. Over the last month, many users have described a familiar pattern on
             community forums: tabs not restoring as expected, sessions feeling unreliable, and a general lack of visibility

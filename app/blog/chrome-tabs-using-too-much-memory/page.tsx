@@ -119,7 +119,7 @@ export default function ChromeTabsUsingTooMuchMemoryPage() {
         {JSON.stringify(faqJsonLd)}
       </Script>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@400;500;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         body {
           margin: 0;
@@ -149,17 +149,19 @@ export default function ChromeTabsUsingTooMuchMemoryPage() {
         }
         .blog-hero-title {
           margin: 0 0 16px;
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(3.2rem, 8vw, 5.9rem);
-          line-height: 0.95;
-          letter-spacing: 0.04em;
+          max-width: 960px;
+          font-size: clamp(2.4rem, 5vw, 4.25rem);
+          font-weight: 800;
+          line-height: 1.08;
+          letter-spacing: -0.055em;
+          text-wrap: balance;
         }
         .blog-hero-lead {
           margin: 0 0 16px;
           max-width: 900px;
           color: #506176;
-          font-size: 20px;
-          line-height: 1.75;
+          font-size: 18px;
+          line-height: 1.7;
         }
         .blog-hero-support {
           margin: 0;
@@ -171,8 +173,11 @@ export default function ChromeTabsUsingTooMuchMemoryPage() {
         .blog-section-heading {
           margin: 42px 0 16px;
           color: #18212f;
-          font-size: 34px;
-          line-height: 1.1;
+          font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+          font-weight: 800;
+          line-height: 1.2;
+          letter-spacing: -0.035em;
+          text-wrap: balance;
         }
         .blog-paragraph {
           margin: 0 0 18px;
@@ -255,13 +260,13 @@ export default function ChromeTabsUsingTooMuchMemoryPage() {
         @media (max-width: 640px) {
           .blog-shell { padding: 76px 18px 56px; }
           .blog-article-card { padding: 24px 18px; border-radius: 22px; }
-          .blog-hero-title { font-size: clamp(2.5rem, 12vw, 3.5rem); line-height: 0.98; }
+          .blog-hero-title { font-size: clamp(2.1rem, 10vw, 3rem); line-height: 1.08; }
           .blog-hero-lead { font-size: 17px; line-height: 1.65; }
           .blog-hero-support,
           .blog-paragraph,
           .blog-checklist li,
           .cta-card p { font-size: 15px; line-height: 1.7; }
-          .blog-section-heading { margin: 34px 0 14px; font-size: 26px; }
+          .blog-section-heading { margin: 34px 0 14px; font-size: 24px; }
         }
       `}</style>
 

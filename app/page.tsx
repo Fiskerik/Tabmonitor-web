@@ -310,7 +310,7 @@ function ExtensionMockup() {
     }}>
       {/* Top bar */}
       <div style={{ background: 'var(--panel-top)', padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 15, letterSpacing: '0.1em', color: 'var(--cyan)' }}>TabMonitor</span>
+        <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-0.01em', color: 'var(--purple)' }}>TabMonitor</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span
             style={{
@@ -534,7 +534,7 @@ export default function LandingPage() {
       </Script>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -593,8 +593,8 @@ export default function LandingPage() {
           border-bottom: 1px solid rgba(122,145,173,0.18); padding: 14px 48px;
         }
         .nav-logo {
-          font-family: 'Bebas Neue', sans-serif; font-size: 22px;
-          letter-spacing: 0.1em; color: var(--cyan);
+          font-size: 17px; font-weight: 800;
+          letter-spacing: -0.01em; color: var(--purple);
           display: flex; align-items: center; gap: 8px;
         }
         .brand-logo {
@@ -635,14 +635,28 @@ export default function LandingPage() {
         }
         .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--cyan); }
 
-        .hero-title {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(64px, 7.5vw, 108px);
-          line-height: 0.92; letter-spacing: 0.02em; margin-bottom: 26px;
+        .hero-heading {
+          max-width: 720px;
+          font-size: clamp(40px, 5.7vw, 72px);
+          font-weight: 800;
+          line-height: 1.03;
+          letter-spacing: -0.055em;
+          margin-bottom: 16px;
+          text-wrap: balance;
         }
-        .hero-title .accent {
+        .hero-heading .accent {
           background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-subheading {
+          max-width: 620px;
+          font-size: clamp(20px, 2.4vw, 30px);
+          font-weight: 700;
+          line-height: 1.18;
+          letter-spacing: -0.035em;
+          margin-bottom: 16px;
+          color: var(--text);
+          text-wrap: balance;
         }
 
         .hero-desc { font-size: 17px; line-height: 1.75; color: var(--text-mid); margin-bottom: 40px; max-width: 440px; }
@@ -685,7 +699,7 @@ export default function LandingPage() {
         .chrome-ext-icon {
           width: 16px; height: 16px; border-radius: 3px;
           background: var(--cyan); display: flex; align-items: center; justify-content: center;
-          font-size: 9px; font-weight: 700; color: var(--bg); font-family: 'Bebas Neue', sans-serif;
+          font-size: 9px; font-weight: 800; color: var(--bg);
         }
 
         /* ── Stats bar ── */
@@ -714,8 +728,12 @@ export default function LandingPage() {
         .section-label::after { content: ''; display: block; height: 1px; width: 40px; background: var(--cyan); }
 
         .section-title {
-          font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 64px);
-          line-height: 1; letter-spacing: 0.02em; margin-bottom: 16px;
+          font-size: clamp(30px, 4vw, 48px);
+          font-weight: 800;
+          line-height: 1.08;
+          letter-spacing: -0.045em;
+          margin-bottom: 16px;
+          text-wrap: balance;
         }
         .section-sub { font-size: 16px; color: var(--text-mid); max-width: 480px; line-height: 1.7; margin-bottom: 64px; }
 
@@ -751,7 +769,7 @@ export default function LandingPage() {
           font-family: 'JetBrains Mono', monospace;
         }
         .plan-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; }
-        .plan-price { font-family: 'Bebas Neue', sans-serif; font-size: 56px; line-height: 1; letter-spacing: 0.02em; margin-bottom: 4px; }
+        .plan-price { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 4px; }
         .plan-price sup { font-size: 22px; font-family: 'DM Sans', sans-serif; font-weight: 700; vertical-align: super; }
         .plan-period { font-size: 13px; color: var(--text-dim); margin-bottom: 28px; }
         .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
@@ -770,7 +788,7 @@ export default function LandingPage() {
         /* ── Download ── */
         .download-section { background: linear-gradient(135deg, var(--panel-top), var(--panel)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .download-inner { max-width: 1200px; margin: 0 auto; padding: 80px 48px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 48px; }
-        .download-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 0.02em; margin-bottom: 12px; }
+        .download-title { font-size: 38px; font-weight: 800; line-height: 1.08; letter-spacing: -0.045em; margin-bottom: 12px; }
         .download-sub { font-size: 15px; color: var(--text-dim); }
 
         .chrome-badge {
@@ -782,7 +800,7 @@ export default function LandingPage() {
 
         /* ── Footer ── */
         .footer-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px; display: flex; align-items: flex-start; justify-content: space-between; gap: 36px; }
-        .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.1em; color: var(--text-dim); }
+        .footer-logo { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; color: var(--text-dim); }
         .footer-logo-wrap {
           display: flex;
           align-items: center;
@@ -890,8 +908,8 @@ export default function LandingPage() {
           <p className="hero-eyebrow">
             <span className="live-dot" /> Chrome Extension · Free forever
           </p>
-          <h1>Tab Monitor - Chrome Extension for Tab Management & RAM Monitoring</h1>
-          <h2>Control browser memory, manage tabs, and stay focused from one side panel</h2>
+          <h1 className="hero-heading">Control Chrome memory from <span className="accent">one side panel</span>.</h1>
+          <h2 className="hero-subheading">Live RAM, focused cleanup, and tab workflows that stay under control.</h2>
           <p className="hero-desc">
             TabMonitor gives you one side panel for monitoring, tab management, and focus. See heavy tabs live, cut browser lag fast, and stay organized with task manager and pomodoro-style workflows.
           </p>

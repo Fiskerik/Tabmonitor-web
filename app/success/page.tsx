@@ -18,10 +18,10 @@ export default function SuccessPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@500;600&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
       `}</style>
 
-      <main className="relative min-h-screen overflow-hidden bg-[#f5f7fb] px-6 py-10 font-['DM_Sans',sans-serif] text-[#18212f]">
+      <main className="relative min-h-screen overflow-hidden bg-[#f5f7fb] px-6 py-10 font-['Inter',sans-serif] text-[#18212f]">
         <div className="pointer-events-none absolute -left-36 -top-40 h-[580px] w-[580px] rounded-full bg-[radial-gradient(circle,rgba(87,188,255,0.18),transparent_70%)]" />
         <div className="pointer-events-none absolute -bottom-28 -right-24 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(34,197,94,0.11),transparent_72%)]" />
 
@@ -31,8 +31,8 @@ export default function SuccessPage() {
               <span className="text-4xl" aria-hidden="true">🎉</span>
             </div>
 
-            <p className="mb-3 font-['DM_Mono',monospace] text-xs font-semibold uppercase tracking-[0.18em] text-[#57bcff]">Tab Monitor Pro</p>
-            <h1 className="mb-4 font-['Syne',sans-serif] text-3xl font-extrabold tracking-[-0.02em] text-[#18212f]">Payment complete!</h1>
+            <p className="mb-3 font-['JetBrains_Mono',monospace] text-xs font-semibold uppercase tracking-[0.18em] text-[#57bcff]">Tab Monitor Pro</p>
+            <h1 className="mb-4 text-4xl font-extrabold tracking-[-0.035em] text-[#18212f]">Payment complete!</h1>
             <p className="mb-8 leading-relaxed text-[#506176]">
               Thanks for your purchase. You can now open your extension and start using premium features right away.
             </p>

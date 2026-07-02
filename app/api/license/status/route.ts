@@ -234,15 +234,19 @@ function buildPayload(row: any) {
   const now = Math.floor(Date.now() / 1000);
   const trialEndsAt = row.trial_ends_at
     ? Math.floor(new Date(row.trial_ends_at).getTime() / 1000) : null;
+  const currentPeriodEnd = row.current_period_end
+    ? Math.floor(new Date(row.current_period_end).getTime() / 1000) : null;
   const trialActive = trialEndsAt ? trialEndsAt > now : false;
-  const active = row.is_active || trialActive;
+  const plan = String(row.plan || '').toLowerCase();
+  const hasExpiredPeriod = currentPeriodEnd ? currentPeriodEnd <= now : false;
+  const planLooksPro = ['pro', 'lifetime'].includes(plan) && !hasExpiredPeriod;
+  const active = !!row.is_active || trialActive || planLooksPro;
 
   return {
     plan: active ? 'pro' : 'free',
     isActive: !!active,
     trialEndsAt,
-    currentPeriodEnd: row.current_period_end
-      ? Math.floor(new Date(row.current_period_end).getTime() / 1000) : null,
+    currentPeriodEnd,
     features: {
       advancedStats: !!active,
       rulesEngine: !!active,

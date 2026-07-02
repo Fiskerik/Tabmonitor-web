@@ -82,11 +82,12 @@ const PRICING = [
     period: 'per month',
     features: [
       'Everything in Free',
-      'Advanced insights',
+      'Smart cleanup plan',
+      'Auto-suspend idle high-RAM tabs',
       'Per-site memory rules',
-      'Weekly reports',
-      'CSV export',
-      'Priority support',
+      'Unlimited saved sessions & backups',
+      'Grid View and advanced analytics',
+      'Weekly memory report',
     ],
     cta: 'Start 3-day trial',
     highlight: true,
@@ -112,11 +113,6 @@ const SEO_STRUCTURED_DATA = {
     price: '0',
     priceCurrency: 'USD',
   },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4',
-    ratingCount: '2400',
-  },
   url: 'https://www.tabmonitor.se',
 };
 const EXTENSION_STRUCTURED_DATA = {
@@ -130,11 +126,6 @@ const EXTENSION_STRUCTURED_DATA = {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating", 
-    "ratingValue": "5.0",
-    "ratingCount": "100"  
   },
   "installUrl": "https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd",
   "screenshot": "https://lh3.googleusercontent.com/vbJnjbT4tmuwLb3qJWnJcsmAiw5dPFZHm98xveMUzFIt-CLEQlyw4qyZpurs_BQmHZNbl872Ro-q9nCpCuEfl612k5A=s800-w800-h500",  
@@ -910,7 +901,7 @@ export default function LandingPage() {
           </div>
          <div className="stats-bar" hidden>
             <div>
-              <span className="stat-num"><AnimatedCounter target={2400} suffix="+" /></span>
+              <span className="stat-num"><AnimatedCounter target={280} suffix="+" /></span>
               <span className="stat-label">Active users</span>
             </div>
             <div>

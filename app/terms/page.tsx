@@ -71,7 +71,7 @@ export default function TermsPage() {
           },
           {
             title: '5. Free trial',
-            content: `New users may be eligible for a 7-day free trial of the Pro plan. Only one trial per email address is permitted. At the end of the trial, your account will revert to the free tier unless you have subscribed.`,
+            content: `New users may be eligible for a 3-day free trial of the Pro plan. Only one trial per email address is permitted. Trial checkout may require a payment method. At the end of the trial, your subscription continues unless you cancel before the trial ends.`,
           },
           {
             title: '6. Acceptable use',

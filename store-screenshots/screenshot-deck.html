@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tab Monitor Chrome Web Store Screenshots</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f8f9fc;
+      color: #1a1d23;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .slide {
+      width: 1280px;
+      height: 800px;
+      position: relative;
+      overflow: hidden;
+      display: none;
+      padding: 44px 52px;
+      background:
+        linear-gradient(120deg, rgba(99,102,241,0.10), transparent 34%),
+        linear-gradient(0deg, rgba(0,212,255,0.08), transparent 46%),
+        #f8f9fc;
+    }
+    .slide.active { display: block; }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6366f1;
+      margin-bottom: 20px;
+    }
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      box-shadow: 0 10px 24px rgba(99,102,241,0.24);
+    }
+    .content {
+      width: 520px;
+      position: relative;
+      z-index: 2;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #d9e1ee;
+      background: #ffffff;
+      color: #4b5263;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 22px rgba(15,23,42,0.06);
+    }
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+    h1 {
+      font-size: 58px;
+      line-height: 0.98;
+      margin: 0 0 20px;
+      letter-spacing: -0.04em;
+      color: #1a1d23;
+    }
+    .sub {
+      margin: 0 0 28px;
+      color: #4b5263;
+      font-size: 22px;
+      line-height: 1.42;
+      max-width: 500px;
+    }
+    .bullets {
+      display: grid;
+      gap: 12px;
+      width: 500px;
+    }
+    .bullet {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid #eef0f5;
+      border-radius: 18px;
+      padding: 13px 15px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.07);
+    }
+    .bullet-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #f1f3f8;
+      color: #6366f1;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .bullet b { display: block; font-size: 16px; margin-bottom: 3px; }
+    .bullet span { color: #8c93a3; font-size: 13px; line-height: 1.35; }
+
+    .chrome {
+      position: absolute;
+      right: 38px;
+      top: 46px;
+      width: 658px;
+      height: 708px;
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid #d9e1ee;
+      box-shadow: 0 36px 95px rgba(15,23,42,0.18);
+      overflow: hidden;
+    }
+    .browser-bar {
+      height: 58px;
+      background: #f1f3f8;
+      border-bottom: 1px solid #d9e1ee;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: #d9e1ee; }
+    .address {
+      flex: 1;
+      height: 32px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #d9e1ee;
+      color: #8c93a3;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+    .browser-body {
+      height: calc(100% - 58px);
+      display: grid;
+      grid-template-columns: 286px 372px;
+      background: #f8f9fc;
+    }
+    .web-preview {
+      border-right: 1px solid #d9e1ee;
+      padding: 22px;
+      background:
+        linear-gradient(135deg, rgba(99,102,241,0.12), transparent 54%),
+        #ffffff;
+    }
+    .web-card {
+      border: 1px solid #eef0f5;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 14px 34px rgba(15,23,42,0.08);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .web-card h3 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.03em; }
+    .web-line { height: 9px; border-radius: 999px; background: #eef0f5; margin: 9px 0; }
+    .web-line.short { width: 62%; }
+    .web-kpi {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .web-kpi div {
+      border: 1px solid #eef0f5;
+      border-radius: 14px;
+      padding: 10px;
+      background: #f8f9fc;
+    }
+    .web-kpi strong { display: block; font-size: 22px; color: #6366f1; }
+    .web-kpi span { color: #8c93a3; font-size: 11px; text-transform: uppercase; font-weight: 800; }
+
+    .sidepanel {
+      background: #f8f9fc;
+      height: 100%;
+      color: #1a1d23;
+      overflow: hidden;
+      font-size: 13px;
+    }
+    .sp-topbar {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      background: #ffffff;
+      border-bottom: 1px solid #eef0f5;
+    }
+    .sp-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .sp-app-logo {
+      width: 22px;
+      height: 22px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    }
+    .sp-actions { display: flex; gap: 5px; }
+    .sp-btn {
+      border: 1px solid #eef0f5;
+      background: #ffffff;
+      color: #8c93a3;
+      border-radius: 11px;
+      height: 28px;
+      padding: 0 9px;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .sp-btn.pro {
+      color: #fff;
+      border: 0;
+      background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+    }
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px 10px;
+      background: #ffffff;
+      border-bottom: 1px solid #eef0f5;
+    }
+    .summary-card {
+      background: #f8f9fc;
+      border: 1px solid #eef0f5;
+      border-radius: 14px;
+      padding: 8px 9px;
+    }
+    .summary-label {
+      display: block;
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #8c93a3;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .summary-count { font-size: 22px; font-weight: 800; line-height: 1; }
+    .crit { color: #ef4444; }
+    .warn { color: #fbbf24; }
+    .ok { color: #22c55e; }
+    .tab-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: #ffffff;
+      border-bottom: 1px solid #eef0f5;
+      padding: 0 6px;
+    }
+    .tab-nav div {
+      padding: 10px 2px 8px;
+      text-align: center;
+      font-size: 11px;
+      color: #8c93a3;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-nav .active {
+      color: #6366f1;
+      border-color: #6366f1;
+      font-weight: 800;
+    }
+    .toolbar {
+      height: 41px;
+      padding: 7px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border-bottom: 1px solid #eef0f5;
+      color: #8c93a3;
+      font-size: 11px;
+    }
+    .pills { display: flex; gap: 4px; }
+    .pill {
+      border: 1px solid #eef0f5;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #ffffff;
+      color: #8c93a3;
+      font-weight: 700;
+    }
+    .pill.active { background: #6366f1; color: #ffffff; border-color: #6366f1; }
+    .cleanup {
+      margin: 8px 10px 0;
+      padding: 10px 11px;
+      border-radius: 16px;
+      border: 1px solid rgba(99,102,241,0.24);
+      background: linear-gradient(135deg, rgba(99,102,241,0.09), rgba(0,212,255,0.07));
+    }
+    .cleanup-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .cleanup b { font-size: 12px; }
+    .cleanup strong { color: #6366f1; font-size: 18px; }
+    .cleanup p { margin: 5px 0 9px; color: #4b5263; font-size: 11px; line-height: 1.3; }
+    .cleanup-actions { display: flex; gap: 6px; }
+    .cleanup-actions button {
+      border: 1px solid #d9e1ee;
+      border-radius: 12px;
+      background: #ffffff;
+      color: #4b5263;
+      padding: 6px 9px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .cleanup-actions button.primary { background: #6366f1; color: #fff; border-color: #6366f1; }
+    .tabs {
+      display: grid;
+      gap: 6px;
+      padding: 8px 8px 12px;
+    }
+    .tab-card {
+      background: #ffffff;
+      border: 1px solid #eef0f5;
+      border-left: 4px solid #d9e1ee;
+      border-radius: 16px;
+      padding: 9px 11px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+    }
+    .tab-card.critical { border-left-color: #ef4444; }
+    .tab-card.warning { border-left-color: #fbbf24; }
+    .tab-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+    .tab-name { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tab-domain { color: #8c93a3; font-size: 10px; margin-top: 2px; }
+    .tab-mem { font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 800; color: #4b5263; }
+    .bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #f1f3f8;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #00d4ff, #22c55e); }
+    .fill.hot { background: linear-gradient(90deg, #fbbf24, #ef4444); }
+
+    .drawer {
+      position: absolute;
+      right: 28px;
+      bottom: 28px;
+      width: 360px;
+      border: 1px solid #d9e1ee;
+      border-radius: 20px;
+      background: #ffffff;
+      box-shadow: 0 24px 70px rgba(15,23,42,0.22);
+      padding: 18px;
+      z-index: 3;
+    }
+    .drawer h2 { margin: 0 0 8px; font-size: 24px; letter-spacing: -0.03em; }
+    .drawer p { margin: 0 0 14px; color: #4b5263; line-height: 1.38; font-size: 14px; }
+    .drawer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .drawer-card {
+      border: 1px solid #eef0f5;
+      border-radius: 14px;
+      padding: 11px;
+      background: #f8f9fc;
+    }
+    .drawer-card strong { display: block; color: #6366f1; font-size: 22px; }
+    .drawer-card span { color: #8c93a3; font-size: 11px; font-weight: 700; }
+    .grid-view {
+      position: absolute;
+      left: 340px;
+      top: 108px;
+      width: 286px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+      z-index: 2;
+    }
+    .tile {
+      height: 112px;
+      border: 1px solid #eef0f5;
+      border-radius: 18px;
+      padding: 12px;
+      background: #ffffff;
+      box-shadow: 0 12px 26px rgba(15,23,42,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .favicon {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: #f1f3f8;
+      color: #6366f1;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+    .tile b { font-size: 13px; }
+    .tile span { color: #8c93a3; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <section class="slide active" id="slide-1">
+    <div class="content">
+      <div class="brand"><div class="logo">TM</div>Tab Monitor</div>
+      <span class="badge">Chrome side panel for tab overload</span>
+      <h1>Find the tabs slowing Chrome down.</h1>
+      <p class="sub">Live RAM and CPU monitoring in the Chrome sidebar shows the heavy, duplicated, idle, and risky tabs instantly.</p>
+      <div class="bullets">
+        <div class="bullet"><div class="bullet-icon">1</div><div><b>Spot memory hogs</b><span>Sort tabs by RAM, CPU, status, or window.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">2</div><div><b>Clean up in one click</b><span>Suspend, close, pin, bookmark, or move selected tabs.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">3</div><div><b>Keep context</b><span>Use history, parking, sessions, and backups when you need them back.</span></div></div>
+      </div>
+    </div>
+    <div class="chrome">
+      <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">chrome://newtab</div></div>
+      <div class="browser-body">
+        <div class="web-preview">
+          <div class="web-card"><h3>Research workspace</h3><div class="web-line"></div><div class="web-line"></div><div class="web-line short"></div></div>
+          <div class="web-card"><h3>Meeting notes</h3><div class="web-line"></div><div class="web-line short"></div><div class="web-kpi"><div><strong>24</strong><span>Tabs</span></div><div><strong>4</strong><span>Windows</span></div></div></div>
+        </div>
+        <div class="sidepanel">
+          <div class="sp-topbar"><div class="sp-brand"><span class="sp-app-logo"></span>Tab Monitor</div><div class="sp-actions"><span class="sp-btn">Grid</span><span class="sp-btn pro">Pro</span></div></div>
+          <div class="summary-row"><div class="summary-card"><span class="summary-label">Critical</span><span class="summary-count crit">2</span></div><div class="summary-card"><span class="summary-label">Warning</span><span class="summary-count warn">5</span></div><div class="summary-card"><span class="summary-label">Normal</span><span class="summary-count ok">18</span></div></div>
+          <div class="tab-nav"><div class="active">Processes</div><div>History</div><div>Stats</div><div>Settings</div></div>
+          <div class="toolbar"><div class="pills"><span class="pill active">RAM</span><span class="pill">CPU</span><span class="pill">Idle</span></div><span>25 tabs</span></div>
+          <div class="tabs">
+            <div class="tab-card critical"><div class="tab-head"><div><div class="tab-name">Figma Design System</div><div class="tab-domain">figma.com · idle 42m</div></div><span class="tab-mem">1.2 GB</span></div><div class="bar"><div class="fill hot" style="width:92%"></div></div></div>
+            <div class="tab-card warning"><div class="tab-head"><div><div class="tab-name">YouTube Studio</div><div class="tab-domain">youtube.com · audio</div></div><span class="tab-mem">847 MB</span></div><div class="bar"><div class="fill hot" style="width:72%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Gmail Inbox</div><div class="tab-domain">mail.google.com</div></div><span class="tab-mem">214 MB</span></div><div class="bar"><div class="fill" style="width:25%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Docs: Chrome Extensions</div><div class="tab-domain">developer.chrome.com</div></div><span class="tab-mem">189 MB</span></div><div class="bar"><div class="fill" style="width:21%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-2">
+    <div class="content">
+      <div class="brand"><div class="logo">TM</div>Smart Cleanup Plan</div>
+      <span class="badge">New in 1.1.0</span>
+      <h1>Free memory now. Automate it with Pro.</h1>
+      <p class="sub">Tab Monitor turns a long list of tabs into a clear action queue, then shows the exact Pro automation that would prevent the same mess next time.</p>
+      <div class="bullets">
+        <div class="bullet"><div class="bullet-icon">↯</div><div><b>1.8 GB reclaimable</b><span>Idle high-RAM tabs are grouped into one cleanup action.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">✓</div><div><b>Post-action proof</b><span>Show users how much memory they just freed.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">P</div><div><b>Upgrade at the right moment</b><span>Offer auto-suspend rules after the user sees value.</span></div></div>
+      </div>
+    </div>
+    <div class="chrome">
+      <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">chrome://newtab</div></div>
+      <div class="browser-body">
+        <div class="web-preview">
+          <div class="web-card"><h3>Before cleanup</h3><div class="web-kpi"><div><strong>4.1 GB</strong><span>Total RAM</span></div><div><strong>9</strong><span>Watchlist</span></div></div></div>
+          <div class="web-card"><h3>After action</h3><div class="web-line"></div><div class="web-line short"></div></div>
+        </div>
+        <div class="sidepanel">
+          <div class="sp-topbar"><div class="sp-brand"><span class="sp-app-logo"></span>Tab Monitor</div><div class="sp-actions"><span class="sp-btn pro">Pro</span></div></div>
+          <div class="summary-row"><div class="summary-card"><span class="summary-label">Critical</span><span class="summary-count crit">2</span></div><div class="summary-card"><span class="summary-label">Warning</span><span class="summary-count warn">5</span></div><div class="summary-card"><span class="summary-label">Normal</span><span class="summary-count ok">18</span></div></div>
+          <div class="tab-nav"><div class="active">Processes</div><div>History</div><div>Stats</div><div>Settings</div></div>
+          <div class="toolbar"><div class="pills"><span class="pill active">RAM</span><span class="pill">Idle</span></div><span>25 tabs</span></div>
+          <div class="cleanup"><div class="cleanup-top"><b>Smart Cleanup Plan</b><strong>1.8 GB</strong></div><p>Suspend 6 idle high-RAM tabs. Found 3 duplicates and 2 leak candidates.</p><div class="cleanup-actions"><button class="primary">Suspend idle now</button><button>Automate with Pro</button></div></div>
+          <div class="tabs">
+            <div class="tab-card critical"><div class="tab-head"><div><div class="tab-name">Figma Design System</div><div class="tab-domain">idle 42m · rule recommended</div></div><span class="tab-mem">1.2 GB</span></div><div class="bar"><div class="fill hot" style="width:92%"></div></div></div>
+            <div class="tab-card warning"><div class="tab-head"><div><div class="tab-name">Analytics Dashboard</div><div class="tab-domain">duplicate tab detected</div></div><span class="tab-mem">512 MB</span></div><div class="bar"><div class="fill hot" style="width:58%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Notion Planning</div><div class="tab-domain">safe to suspend</div></div><span class="tab-mem">286 MB</span></div><div class="bar"><div class="fill" style="width:36%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-3">
+    <div class="content">
+      <div class="brand"><div class="logo">TM</div>Sessions & Recovery</div>
+      <span class="badge">Save workspaces, restore later</span>
+      <h1>Recover from tab chaos.</h1>
+      <p class="sub">Auto-backups, saved sessions, parking, and restore tools help power users close tabs without feeling like they are losing work.</p>
+      <div class="bullets">
+        <div class="bullet"><div class="bullet-icon">S</div><div><b>Saved sessions</b><span>Store recurring layouts for research, admin, or client work.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">B</div><div><b>Auto-backups</b><span>Recover recent browser state after a crash or cleanup mistake.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">R</div><div><b>Restore confidence</b><span>Make cleanup feel reversible instead of scary.</span></div></div>
+      </div>
+    </div>
+    <div class="chrome">
+      <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">chrome://newtab</div></div>
+      <div class="browser-body">
+        <div class="web-preview">
+          <div class="web-card"><h3>Workspace template</h3><div class="web-line"></div><div class="web-line"></div><div class="web-kpi"><div><strong>12</strong><span>Tabs</span></div><div><strong>3</strong><span>Groups</span></div></div></div>
+          <div class="web-card"><h3>Last backup</h3><div class="web-line short"></div></div>
+        </div>
+        <div class="sidepanel">
+          <div class="sp-topbar"><div class="sp-brand"><span class="sp-app-logo"></span>Tab Monitor</div><div class="sp-actions"><span class="sp-btn pro">Pro</span></div></div>
+          <div class="summary-row"><div class="summary-card"><span class="summary-label">Saved</span><span class="summary-count ok">4</span></div><div class="summary-card"><span class="summary-label">Backups</span><span class="summary-count">18</span></div><div class="summary-card"><span class="summary-label">Parked</span><span class="summary-count warn">7</span></div></div>
+          <div class="tab-nav"><div>Processes</div><div class="active">History</div><div>Stats</div><div>Settings</div></div>
+          <div class="toolbar"><div class="pills"><span class="pill active">Sessions</span><span class="pill">Backups</span></div><span>Restore ready</span></div>
+          <div class="tabs">
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Monday research workspace</div><div class="tab-domain">14 tabs · 2 windows</div></div><span class="tab-mem">Restore</span></div><div class="bar"><div class="fill" style="width:78%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Client admin dashboard</div><div class="tab-domain">9 tabs · saved today</div></div><span class="tab-mem">Open</span></div><div class="bar"><div class="fill" style="width:52%"></div></div></div>
+            <div class="tab-card warning"><div class="tab-head"><div><div class="tab-name">Auto-backup 10:45</div><div class="tab-domain">25 tabs · before cleanup</div></div><span class="tab-mem">Pro</span></div><div class="bar"><div class="fill hot" style="width:64%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-4">
+    <div class="content">
+      <div class="brand"><div class="logo">TM</div>Pro Automation</div>
+      <span class="badge">Rules that keep Chrome fast</span>
+      <h1>Stop fixing the same tabs manually.</h1>
+      <p class="sub">Pro turns repeated memory pain into one-click rules: auto-suspend idle sites, warn on leaks, and keep heavy domains under control.</p>
+      <div class="bullets">
+        <div class="bullet"><div class="bullet-icon">20</div><div><b>YouTube rule</b><span>Auto-suspend after 20 minutes idle.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">!</div><div><b>Leak alerts</b><span>Warn before a tab starts dragging the browser.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">∞</div><div><b>Unlimited focus</b><span>Keep only the tabs that matter active.</span></div></div>
+      </div>
+    </div>
+    <div class="chrome">
+      <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">chrome://newtab</div></div>
+      <div class="browser-body">
+        <div class="web-preview">
+          <div class="web-card"><h3>Weekly Memory Report</h3><div class="web-kpi"><div><strong>6.4 GB</strong><span>Saved</span></div><div><strong>3</strong><span>Rules</span></div></div></div>
+          <div class="web-card"><h3>Worst domains</h3><div class="web-line"></div><div class="web-line"></div><div class="web-line short"></div></div>
+        </div>
+        <div class="sidepanel">
+          <div class="sp-topbar"><div class="sp-brand"><span class="sp-app-logo"></span>Tab Monitor</div><div class="sp-actions"><span class="sp-btn pro">Pro</span></div></div>
+          <div class="summary-row"><div class="summary-card"><span class="summary-label">Rules</span><span class="summary-count ok">3</span></div><div class="summary-card"><span class="summary-label">Leaks</span><span class="summary-count crit">2</span></div><div class="summary-card"><span class="summary-label">Saved</span><span class="summary-count">6.4</span></div></div>
+          <div class="tab-nav"><div>Processes</div><div>History</div><div>Stats</div><div class="active">Settings</div></div>
+          <div class="toolbar"><div class="pills"><span class="pill active">Rules</span><span class="pill">Alerts</span></div><span>Automation on</span></div>
+          <div class="tabs">
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">youtube.com</div><div class="tab-domain">Auto-suspend after 20m idle</div></div><span class="tab-mem">On</span></div><div class="bar"><div class="fill" style="width:74%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">figma.com</div><div class="tab-domain">Warn above 900 MB</div></div><span class="tab-mem">On</span></div><div class="bar"><div class="fill" style="width:66%"></div></div></div>
+            <div class="tab-card warning"><div class="tab-head"><div><div class="tab-name">Rule recommendation</div><div class="tab-domain">Auto-suspend docs after 30m idle</div></div><span class="tab-mem">Add</span></div><div class="bar"><div class="fill hot" style="width:54%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-5">
+    <div class="content">
+      <div class="brand"><div class="logo">TM</div>Grid View</div>
+      <span class="badge">Visual overview for power tab users</span>
+      <h1>See every tab before you decide.</h1>
+      <p class="sub">Grid View gives Pro users a fast visual map of windows, domains, and workflows so cleanup feels deliberate.</p>
+      <div class="bullets">
+        <div class="bullet"><div class="bullet-icon">G</div><div><b>Scan by site</b><span>Quickly spot duplicate dashboards and stale research.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">W</div><div><b>Across windows</b><span>Bring scattered work back into a clean structure.</span></div></div>
+        <div class="bullet"><div class="bullet-icon">P</div><div><b>Pro preview</b><span>Let free users see exactly what they unlock.</span></div></div>
+      </div>
+    </div>
+    <div class="chrome">
+      <div class="browser-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="address">chrome://newtab</div></div>
+      <div class="browser-body">
+        <div class="web-preview">
+          <div class="grid-view">
+            <div class="tile"><div class="favicon">F</div><b>Design System</b><span>figma.com</span></div>
+            <div class="tile"><div class="favicon">Y</div><b>Studio Analytics</b><span>youtube.com</span></div>
+            <div class="tile"><div class="favicon">G</div><b>Gmail Inbox</b><span>mail.google.com</span></div>
+            <div class="tile"><div class="favicon">N</div><b>Release Notes</b><span>notion.so</span></div>
+          </div>
+          <div class="web-card"><h3>Grid View</h3><div class="web-line"></div><div class="web-line short"></div></div>
+        </div>
+        <div class="sidepanel">
+          <div class="sp-topbar"><div class="sp-brand"><span class="sp-app-logo"></span>Tab Monitor</div><div class="sp-actions"><span class="sp-btn">Grid</span><span class="sp-btn pro">Pro</span></div></div>
+          <div class="summary-row"><div class="summary-card"><span class="summary-label">Windows</span><span class="summary-count">4</span></div><div class="summary-card"><span class="summary-label">Domains</span><span class="summary-count ok">12</span></div><div class="summary-card"><span class="summary-label">Dupes</span><span class="summary-count warn">3</span></div></div>
+          <div class="tab-nav"><div class="active">Processes</div><div>History</div><div>Stats</div><div>Settings</div></div>
+          <div class="toolbar"><div class="pills"><span class="pill active">Window 1</span><span class="pill">Window 2</span></div><span>Grid open</span></div>
+          <div class="tabs">
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Figma Design System</div><div class="tab-domain">group: Design</div></div><span class="tab-mem">1.2 GB</span></div><div class="bar"><div class="fill hot" style="width:92%"></div></div></div>
+            <div class="tab-card"><div class="tab-head"><div><div class="tab-name">Stripe Dashboard</div><div class="tab-domain">group: Admin</div></div><span class="tab-mem">248 MB</span></div><div class="bar"><div class="fill" style="width:28%"></div></div></div>
+            <div class="tab-card warning"><div class="tab-head"><div><div class="tab-name">Duplicate: Docs</div><div class="tab-domain">developer.chrome.com</div></div><span class="tab-mem">186 MB</span></div><div class="bar"><div class="fill hot" style="width:34%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drawer">
+      <h2>Grid View preview</h2>
+      <p>Show the locked Pro value before checkout: windows, domains, duplicates, and visual tab context.</p>
+      <div class="drawer-grid"><div class="drawer-card"><strong>25</strong><span>Tabs mapped</span></div><div class="drawer-card"><strong>3</strong><span>Duplicates found</span></div></div>
+    </div>
+  </section>
+  <script>
+    const requested = new URLSearchParams(location.search).get('slide') || '1';
+    document.querySelectorAll('.slide').forEach(slide => {
+      slide.classList.toggle('active', slide.id === `slide-${requested}`);
+    });
+  </script>
+</body>
+</html>

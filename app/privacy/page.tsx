@@ -58,11 +58,11 @@ export default function PrivacyPage() {
           },
           {
             title: '2. Data we collect',
-            content: `The TabMonitor extension collects no personal data and makes no external network requests. All tab metrics (memory usage, CPU usage, titles, URLs) are processed locally in your browser and never transmitted to any server.\n\nIf you choose to purchase a Pro subscription, we collect your email address for account management and billing purposes. Payment information is handled entirely by Stripe and is never stored on our servers.`,
+            content: `TabMonitor processes tab metrics such as memory usage, CPU usage, titles, and URLs locally in your browser. These tab details are not sent to our servers for normal monitoring, cleanup, analytics, saved sessions, or restore features.\n\nThe extension may contact our website, Supabase, Stripe, or Vercel when you sign in, check a Pro license, open checkout, manage billing, submit feedback, or use account/device features. In those cases we use the minimum account and billing data needed to provide the service.`,
           },
           {
             title: '3. Local storage',
-            content: `The extension stores the following data locally in your browser using Chrome's storage API:\n\n• Your settings preferences (dark mode, alert thresholds, etc.)\n• Closed tab history (titles and URLs, stored locally only)\n• Session statistics (RAM freed, tabs closed)\n• License state (plan type, trial status)\n\nThis data never leaves your device and can be cleared at any time by removing the extension.`,
+            content: `The extension stores the following data locally in your browser using Chrome's storage API:\n\n• Your settings preferences (theme, alert thresholds, Pro toggles, language)\n• Closed tab history, parking lot, saved sessions, and backup snapshots\n• Session statistics such as RAM freed, tabs closed, tabs suspended, and Focus Mode usage\n• Privacy-safe funnel events and Pro usage counters such as install, welcome opened, first action, Pro gate viewed, checkout opened, and license activated\n• License state such as plan type, trial status, and active device metadata\n\nLocal tab titles and URLs stay on your device unless you intentionally share feedback containing that information.`,
           },
           {
             title: '4. Billing & payments',
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
           },
           {
             title: '7. Data retention',
-            content: `We retain your email address and subscription status for as long as you have an active account. If you cancel your subscription and request deletion, we will remove your data within 30 days. To request deletion, contact us at the email below.`,
+            content: `We retain your email address, subscription status, license devices, and submitted feedback for as long as needed to provide account, billing, support, and fraud-prevention functionality. If you cancel your subscription and request deletion, we will remove personal account data within 30 days unless we are required to retain limited records for legal or payment compliance. To request deletion, contact us at the email below.`,
           },
           {
             title: '8. Your rights',

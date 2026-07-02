@@ -81,13 +81,22 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const isPro = existingLicense.plan === 'pro' && existingLicense.is_active
+    const now = Math.floor(Date.now() / 1000)
+    const trialEndsAt = existingLicense.trial_ends_at
+      ? Math.floor(new Date(existingLicense.trial_ends_at).getTime() / 1000)
+      : null
+    const currentPeriodEnd = existingLicense.current_period_end
+      ? Math.floor(new Date(existingLicense.current_period_end).getTime() / 1000)
+      : null
+    const plan = String(existingLicense.plan || '').toLowerCase()
+    const planLooksPro = ['pro', 'lifetime'].includes(plan) && !(currentPeriodEnd && currentPeriodEnd <= now)
+    const isPro = !!existingLicense.is_active || !!(trialEndsAt && trialEndsAt > now) || planLooksPro
 
     return NextResponse.json({
-      plan: existingLicense.plan,
-      isActive: existingLicense.is_active,
-      currentPeriodEnd: existingLicense.current_period_end,
-      trialEndsAt: existingLicense.trial_ends_at,
+      plan: isPro ? 'pro' : 'free',
+      isActive: isPro,
+      currentPeriodEnd,
+      trialEndsAt,
       features: {
         advancedStats: isPro,
         rulesEngine: isPro,

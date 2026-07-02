@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getAuthenticatedEmail } from '@/lib/auth';
 
-const TRIAL_DAYS = 7;
+const TRIAL_DAYS = 3;
 
 export async function POST(req: Request) {
   try {
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
       if (!trialActive && !existing.is_active) {
         return NextResponse.json(
-          { error: 'Your 7-day trial has already been used.' },
+          { error: 'Your 3-day trial has already been used.' },
           { status: 409 }
         );
       }

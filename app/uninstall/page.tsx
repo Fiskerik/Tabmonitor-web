@@ -106,31 +106,34 @@ function UninstallPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:         #f7f4fb;
-          --surface:    #fffdfd;
-          --surface-2:  #f2eef8;
-          --border:     #e0d5ed;
-          --border-2:   #cfc3e2;
-          --text:       #2f2a3c;
-          --mid:        #7a6f86;
-          --dim:        #a899b8;
-          --cyan:       #8a7cf3;
-          --purple:     #b497f3;
-          --green:      #79b88f;
-          --red:        #d98c98;
-          --amber:      #d6a46d;
-          --display:    'Syne', sans-serif;
-          --body:       'DM Sans', sans-serif;
-          --mono:       'DM Mono', monospace;
+          --bg:         #f8f9fc;
+          --surface:    #ffffff;
+          --surface-2:  #f1f3f8;
+          --border:     #eef0f5;
+          --border-2:   #d9e1ee;
+          --text:       #1a1d23;
+          --mid:        #4b5263;
+          --dim:        #8c93a3;
+          --cyan:       #00d4ff;
+          --purple:     #8b5cf6;
+          --green:      #22c55e;
+          --red:        #ef4444;
+          --amber:      #fbbf24;
+          --display:    'Inter', sans-serif;
+          --body:       'Inter', sans-serif;
+          --mono:       'JetBrains Mono', monospace;
         }
 
         body {
-          background: var(--bg);
+          background:
+            linear-gradient(120deg, rgba(99,102,241,0.10), transparent 34%),
+            linear-gradient(0deg, rgba(0,212,255,0.08), transparent 46%),
+            var(--bg);
           color: var(--text);
           font-family: var(--body);
           min-height: 100vh;
@@ -142,30 +145,19 @@ function UninstallPage() {
           padding: 24px 16px;
         }
 
-        /* Soft background orbs */
         body::before {
           content: '';
           position: fixed;
-          width: 600px;
-          height: 600px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(138,124,243,0.14), transparent 70%);
-          top: -200px;
-          left: -150px;
+          inset: 0;
+          background:
+            linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
+          background-size: 36px 36px;
           pointer-events: none;
-          z-index: 0;
+          mask-image: linear-gradient(to bottom, black, transparent 78%);
         }
         body::after {
-          content: '';
-          position: fixed;
-          width: 400px;
-          height: 400px;
-          border-radius: 50%;
-          background: radial-gradient(circle, rgba(180,151,243,0.10), transparent 70%);
-          bottom: -100px;
-          right: -80px;
-          pointer-events: none;
-          z-index: 0;
+          display: none;
         }
 
         .card {
@@ -175,18 +167,19 @@ function UninstallPage() {
           max-width: 540px;
           background: var(--surface);
           border: 1px solid var(--border);
-          border-radius: 24px;
+          border-radius: 18px;
           padding: 44px 40px;
-          box-shadow: 0 8px 40px rgba(93,79,122,0.10), 0 2px 8px rgba(93,79,122,0.06);
+          box-shadow: 0 28px 80px rgba(15,23,42,0.12), 0 0 60px rgba(0,212,255,0.08);
         }
 
         /* ── Header ── */
         .logo {
           font-family: var(--display);
-          font-size: 17px;
+          font-size: 15px;
           font-weight: 800;
           letter-spacing: 0.08em;
           color: var(--cyan);
+          text-transform: uppercase;
           margin-bottom: 32px;
           display: flex;
           align-items: center;
@@ -196,13 +189,13 @@ function UninstallPage() {
           width: 6px;
           height: 6px;
           border-radius: 50%;
-          background: var(--green);
+          background: var(--cyan);
           opacity: 0.8;
         }
 
         .card-title {
           font-family: var(--body);
-          font-size: 32px;
+          font-size: 30px;
           font-weight: 800;
           line-height: 1.1;
           letter-spacing: -0.02em;
@@ -262,7 +255,7 @@ function UninstallPage() {
         }
         .option.selected {
           border-color: var(--cyan);
-          background: rgba(138,124,243,0.06);
+          background: rgba(99,102,241,0.08);
         }
 
         .radio-circle {
@@ -405,7 +398,7 @@ function UninstallPage() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 12px 8px 10px;
+          padding: 20px 8px 10px;
           background: var(--surface-2);
           border: 1px solid var(--border);
           border-radius: 14px;
@@ -427,7 +420,7 @@ function UninstallPage() {
         }
         .plan-pill-badge {
           position: absolute;
-          top: -9px;
+          top: 6px;
           left: 50%;
           transform: translateX(-50%);
           background: linear-gradient(135deg, var(--cyan), var(--purple));
@@ -446,7 +439,8 @@ function UninstallPage() {
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: var(--dim);
-          margin-bottom: 4px;
+          margin-bottom: 5px;
+          margin-top: 2px;
         }
         .plan-pill-price {
           font-family: var(--display);
@@ -466,7 +460,7 @@ function UninstallPage() {
         .btn-submit {
           width: 100%;
           padding: 14px;
-          background: var(--cyan);
+          background: linear-gradient(135deg, #00d4ff, #8b5cf6);
           color: #fff;
           border: none;
           border-radius: 12px;
@@ -479,13 +473,13 @@ function UninstallPage() {
           align-items: center;
           justify-content: center;
           gap: 8px;
-          box-shadow: 0 6px 20px rgba(138,124,243,0.22);
+          box-shadow: 0 6px 20px rgba(99,102,241,0.22);
         }
         .btn-submit:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
         .btn-submit:not(:disabled):hover {
           filter: brightness(1.06);
           transform: translateY(-1px);
-          box-shadow: 0 10px 28px rgba(138,124,243,0.30);
+          box-shadow: 0 10px 28px rgba(99,102,241,0.30);
         }
 
         .btn-skip {
@@ -517,10 +511,9 @@ function UninstallPage() {
           margin: 0 auto 28px;
         }
         .success-title {
-          font-family: var(--display);
           font-size: 36px;
           font-weight: 800;
-          letter-spacing: -0.01em;
+          letter-spacing: -0.035em;
           text-align: center;
           margin-bottom: 12px;
         }
@@ -552,7 +545,7 @@ function UninstallPage() {
         .reinstall-btn:hover {
           border-color: var(--cyan);
           color: var(--cyan);
-          background: rgba(138,124,243,0.05);
+          background: rgba(99,102,241,0.05);
         }
 
         @keyframes fadeUp {
@@ -593,7 +586,7 @@ function UninstallPage() {
 
             <h1 className="card-title">Sorry to see you go.</h1>
             <p className="card-sub">
-              Quick question — what made you uninstall? Your answer helps us improve TabMonitor for everyone.
+              Quick question: what broke the flow? Your answer helps us make Tab Monitor better for heavy-tab users.
             </p>
 
             <div className="options">
@@ -656,7 +649,7 @@ function UninstallPage() {
                 </div>
 
                 {/* Plans section */}
-                <label className="plans-label">Or stay with Pro — pick a plan</label>
+                <label className="plans-label">Or keep Chrome fast with Pro</label>
                 <div className="plans-row">
                   {PLANS.map(plan => (
                     <a
@@ -711,9 +704,9 @@ function UninstallPage() {
             <div className="success-icon">✓</div>
             <h2 className="success-title">Thanks for the feedback.</h2>
             <p className="success-sub">
-              We read every response and use it to make TabMonitor better.
+              We read every response and use it to improve Tab Monitor's cleanup, restore, and Pro workflows.
               <br />
-              You can always reinstall — it takes 10 seconds.
+              You can reinstall anytime when tab overload starts creeping back.
             </p>
 
             <a
@@ -727,7 +720,7 @@ function UninstallPage() {
                 <path d="M4.22 17A10 10 0 0 0 12 22l4.33-7.5A4 4 0 0 1 12 8H3.34A10 10 0 0 0 4.22 17z" fill="#34A853"/>
                 <path d="M12 8H3.34A10 10 0 0 0 4.22 17L8.5 9.5A4 4 0 0 1 12 8z" fill="#FBBC04"/>
               </svg>
-              Reinstall TabMonitor
+              Reinstall Tab Monitor
             </a>
           </div>
         )}
@@ -738,7 +731,7 @@ function UninstallPage() {
 
 export default function UninstallPageWrapper() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#f7f4fb' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#f8f9fc' }} />}>
       <UninstallPage />
     </Suspense>
   );

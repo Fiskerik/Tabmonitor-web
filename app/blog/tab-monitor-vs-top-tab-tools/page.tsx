@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
+import BlogHeroVisual from '@/components/BlogHeroVisual';
 
 const comparisonRows = [
   {
@@ -197,6 +198,7 @@ export default function TopTabToolsComparisonPage() {
             boxShadow: '0 26px 70px rgba(15, 23, 42, 0.08)',
           }}
         >
+          <BlogHeroVisual variant="comparison" />
           <h1 style={{ margin: '0 0 16px', maxWidth: 980, fontSize: 'clamp(2.4rem, 5vw, 4.25rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.055em', textWrap: 'balance' }}>
             Tab Monitor vs the top 5 tab tools: why Tab Monitor wins for real-world productivity
           </h1>

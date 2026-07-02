@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
+import BlogHeroVisual from '@/components/BlogHeroVisual';
 
 const comparisonRows = [
   ['Primary workflow', 'Live side panel for monitoring, cleanup, and focus sessions', 'Converts tabs into a saved list and closes the originals'],
@@ -228,6 +229,8 @@ export default function OneTabNotWorkingPage() {
             </span>
             <span style={{ color: '#6f8196', fontSize: 14 }}>Updated March 19, 2026</span>
           </div>
+
+          <BlogHeroVisual variant="recovery" />
 
           <h1
             className="blog-hero-title"

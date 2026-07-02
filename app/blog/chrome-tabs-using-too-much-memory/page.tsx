@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Script from 'next/script';
+import BlogHeroVisual from '@/components/BlogHeroVisual';
 
 const checklistItems = [
   'Sort active tabs by memory or CPU pressure before closing anything important.',
@@ -290,6 +291,7 @@ export default function ChromeTabsUsingTooMuchMemoryPage() {
 
         <article className="blog-article-card">
           <p className="blog-kicker">Chrome performance guide</p>
+          <BlogHeroVisual variant="memory" />
           <h1 className="blog-hero-title">Chrome tabs using too much memory? How to find and fix heavy tabs</h1>
           <p className="blog-hero-lead">
             If Chrome feels slow, your laptop fan is spinning, or every new tab takes longer to load, the problem is often not

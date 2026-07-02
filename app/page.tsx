@@ -78,8 +78,6 @@ const PRICING = [
   },
   {
     name: 'Pro',
-    price: '2.99',
-    period: 'per month',
     features: [
       'Everything in Free',
       'Smart cleanup plan',
@@ -93,6 +91,27 @@ const PRICING = [
     highlight: true,
   },
 ];
+
+const PRO_BILLING_OPTIONS = [
+  {
+    id: 'monthly',
+    label: 'Monthly',
+    price: '2.99',
+    period: 'per month',
+    note: 'Cancel anytime',
+    stripeUrl: 'https://buy.stripe.com/3cI00idIFeLp3qb3sSc3m03',
+  },
+  {
+    id: 'yearly',
+    label: 'Yearly',
+    price: '29.99',
+    period: 'per year',
+    note: 'Save 16%',
+    stripeUrl: 'https://buy.stripe.com/3cI00idIFeLp3qb3sSc3m03',
+  },
+] as const;
+
+type BillingPeriod = typeof PRO_BILLING_OPTIONS[number]['id'];
 
 const SEO_STRUCTURED_DATA = {
   '@context': 'https://schema.org',
@@ -517,6 +536,8 @@ function ExtensionMockup() {
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState<BillingPeriod>('monthly');
+  const selectedProPlan = PRO_BILLING_OPTIONS.find(plan => plan.id === billingPeriod) || PRO_BILLING_OPTIONS[0];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -769,6 +790,44 @@ export default function LandingPage() {
           font-family: 'JetBrains Mono', monospace;
         }
         .plan-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; }
+        .billing-toggle {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+          padding: 5px;
+          margin: -2px 0 18px;
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          background: rgba(255,255,255,0.72);
+        }
+        .billing-toggle label {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          min-height: 36px;
+          border-radius: 9px;
+          color: var(--text-dim);
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+        }
+        .billing-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+        .billing-toggle label:has(input:checked) {
+          background: #ffffff;
+          color: var(--text);
+          box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+        }
+        .billing-note {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--green);
+        }
         .plan-price { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 4px; }
         .plan-price sup { font-size: 22px; font-family: 'DM Sans', sans-serif; font-weight: 700; vertical-align: super; }
         .plan-period { font-size: 13px; color: var(--text-dim); margin-bottom: 28px; }
@@ -976,14 +1035,36 @@ export default function LandingPage() {
             {PRICING.map(plan => (
               <div key={plan.name} className={`pricing-card ${plan.highlight ? 'highlight' : ''}`}>
                 <p className="plan-name">{plan.name}</p>
+                {plan.highlight && (
+                  <div className="billing-toggle" role="radiogroup" aria-label="Choose Pro billing period">
+                    {PRO_BILLING_OPTIONS.map(option => (
+                      <label key={option.id}>
+                        <input
+                          type="radio"
+                          name="billingPeriod"
+                          value={option.id}
+                          checked={billingPeriod === option.id}
+                          onChange={() => setBillingPeriod(option.id)}
+                        />
+                        <span>{option.label}</span>
+                        {option.id === 'yearly' && <span className="billing-note">{option.note}</span>}
+                      </label>
+                    ))}
+                  </div>
+                )}
                 <div className="plan-price">
-                  {plan.price === '0' ? 'Free' : <><sup>$</sup>{plan.price}</>}
+                  {plan.highlight ? <><sup>$</sup>{selectedProPlan.price}</> : 'Free'}
                 </div>
-                <p className="plan-period">{plan.period}</p>
+                <p className="plan-period">{plan.highlight ? selectedProPlan.period : plan.period}</p>
                 <ul className="plan-features">
                   {plan.features.map(f => <li key={f}>{f}</li>)}
                 </ul>
-                <a href="https://buy.stripe.com/3cI00idIFeLp3qb3sSc3m03" className={`plan-cta ${plan.highlight ? 'primary' : 'secondary'}`}>{plan.cta}</a>
+                <a
+                  href={plan.highlight ? selectedProPlan.stripeUrl : 'https://chromewebstore.google.com/detail/tab-monitor/hohggacchdpanlgbklndifoppehgfdcd'}
+                  className={`plan-cta ${plan.highlight ? 'primary' : 'secondary'}`}
+                >
+                  {plan.cta}
+                </a>
               </div>
             ))}
           </div>

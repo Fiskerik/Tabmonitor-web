@@ -7,6 +7,12 @@ const MAX_DEVICES_PRO = 3;
 const MAX_DEVICES_FREE = 1;
 const REVOKED_LAST_SEEN_AT = '1970-01-01T00:00:00.000Z';
 
+function isRevokedLastSeen(value: string | null): boolean {
+  if (!value) return false;
+  const timestamp = new Date(value).getTime();
+  return Number.isFinite(timestamp) && timestamp <= new Date(REVOKED_LAST_SEEN_AT).getTime();
+}
+
 type DeviceCheckResult = {
   success: boolean;
   reason?: 'DEVICE_LIMIT_REACHED' | 'DEVICE_REVOKED';
@@ -116,6 +122,12 @@ export async function POST(req: Request) {
 }
 
 async function handleDeviceRegistration(email: string, deviceId: string, maxDevices: number): Promise<DeviceCheckResult> {
+  await supabaseAdmin
+    .from('license_devices')
+    .delete()
+    .eq('license_email', email)
+    .lte('last_seen_at', REVOKED_LAST_SEEN_AT);
+
   const { data: devices, error: devicesError } = await supabaseAdmin
     .from('license_devices')
     .select('device_id, last_seen_at')
@@ -133,7 +145,7 @@ async function handleDeviceRegistration(email: string, deviceId: string, maxDevi
   const knownDevice = (devices || []).find(d => d.device_id === deviceId);
 
   if (knownDevice) {
-    if (knownDevice.last_seen_at === REVOKED_LAST_SEEN_AT) {
+    if (isRevokedLastSeen(knownDevice.last_seen_at)) {
       return { success: false, reason: 'DEVICE_REVOKED' };
     }
 
@@ -155,7 +167,7 @@ async function handleDeviceRegistration(email: string, deviceId: string, maxDevi
     return { success: true };
   }
 
-  const activeDevices = (devices || []).filter(d => d.last_seen_at !== REVOKED_LAST_SEEN_AT);
+  const activeDevices = (devices || []).filter(d => !isRevokedLastSeen(d.last_seen_at));
   if (activeDevices.length >= maxDevices) {
     return { success: false, reason: 'DEVICE_LIMIT_REACHED' };
   }

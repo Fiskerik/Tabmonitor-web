@@ -87,7 +87,9 @@ export async function POST(req: Request) {
     // Fires for both normal checkout AND Payment Links (3-day trial link)
     if (event.type === 'checkout.session.completed') {
       const customerId    = data.customer as string;
-      const subscriptionId = data.subscription as string;
+      const subscriptionId = data.subscription as string | null;
+      const checkoutPlan = String(data.metadata?.plan || '').toLowerCase();
+      const isLifetimeCheckout = checkoutPlan === 'lifetime';
       // email is in customer_details for Payment Links
       const email = data.customer_details?.email || data.customer_email || null;
 
@@ -104,10 +106,10 @@ export async function POST(req: Request) {
 
       await updateLicenseByCustomer(customerId, email, {
         is_active:            true,
-        plan:                 'pro',
-        stripe_subscription_id: subscriptionId,
-        current_period_end: data.current_period_end 
-          ? new Date(data.current_period_end * 1000).toISOString() 
+        plan:                 isLifetimeCheckout ? 'lifetime' : 'pro',
+        stripe_subscription_id: subscriptionId || null,
+        current_period_end: periodEnd
+          ? new Date(periodEnd * 1000).toISOString()
           : null,
         // Store trial end so the extension can show "Trial active until X"
         trial_ends_at: trialEnd 

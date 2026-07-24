@@ -7,12 +7,23 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getAuthenticatedEmail } from '@/lib/auth';
 import { getStripeServerClient } from '@/lib/stripe-server';
 
+const PLAN_PRICE_ENV: Record<string, string> = {
+  monthly: 'STRIPE_PRICE_MONTHLY',
+  yearly: 'STRIPE_PRICE_YEARLY',
+  lifetime: 'STRIPE_PRICE_LIFETIME',
+};
+
+function normalizePlan(plan: unknown) {
+  const normalized = typeof plan === 'string' ? plan.toLowerCase().trim() : 'monthly';
+  return normalized in PLAN_PRICE_ENV ? normalized : 'monthly';
+}
 
 export async function POST(req: Request) {
   const stripe = getStripeServerClient();
   try {
     const { email, plan = 'monthly', trial = false } = await req.json();
     if (!email) return NextResponse.json({ error: 'Email required' }, { status: 400 });
+    const normalizedPlan = normalizePlan(plan);
 
     const authenticatedEmail = await getAuthenticatedEmail(req);
     if (!authenticatedEmail) {
@@ -25,9 +36,7 @@ export async function POST(req: Request) {
     }
     const origin = new URL(req.url).origin;
 
-    const priceId = plan === 'yearly'
-      ? process.env.STRIPE_PRICE_YEARLY
-      : process.env.STRIPE_PRICE_MONTHLY;
+    const priceId = process.env[PLAN_PRICE_ENV[normalizedPlan]];
 
     if (!priceId) return NextResponse.json({ error: 'Stripe price ID not configured' }, { status: 500 });
 
@@ -55,17 +64,18 @@ export async function POST(req: Request) {
 
     // Build checkout session params
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
-      mode: 'subscription',
+      mode: normalizedPlan === 'lifetime' ? 'payment' : 'subscription',
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${origin}/`,
       allow_promotion_codes: true,
       billing_address_collection: 'auto',
+      metadata: { plan: normalizedPlan },
     };
 
     // 3-day trial: card required upfront, no charge for 3 days
-    if (trial) {
+    if (trial && normalizedPlan !== 'lifetime') {
       sessionParams.subscription_data = {
         trial_period_days: 3,
         trial_settings: {

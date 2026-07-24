@@ -7,6 +7,68 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 import { getAuthenticatedEmail } from '@/lib/auth';
 import { getStripeServerClient } from '@/lib/stripe-server';
 
+const ACTIVE_SUBSCRIPTION_STATUSES = new Set(['active', 'trialing', 'past_due']);
+
+async function findCustomerForPortal(stripe: ReturnType<typeof getStripeServerClient>, email: string, storedCustomerId?: string | null, storedSubscriptionId?: string | null) {
+  if (storedSubscriptionId) {
+    try {
+      const subscription = await stripe.subscriptions.retrieve(storedSubscriptionId);
+      if (typeof subscription.customer === 'string') {
+        return {
+          customerId: subscription.customer,
+          subscriptionId: subscription.id,
+        };
+      }
+    } catch (error: any) {
+      console.log('[billing/portal] Stored subscription lookup failed', {
+        email,
+        subscriptionId: storedSubscriptionId,
+        error: error?.message,
+      });
+    }
+  }
+
+  const customers = await stripe.customers.list({ email, limit: 10 });
+  let fallbackCustomerId = storedCustomerId || customers.data[0]?.id || null;
+  let fallbackSubscriptionId: string | null = null;
+
+  for (const customer of customers.data) {
+    const subs = await stripe.subscriptions.list({ customer: customer.id, status: 'all', limit: 10 });
+    const activeSub = subs.data.find(sub => ACTIVE_SUBSCRIPTION_STATUSES.has(sub.status));
+    if (activeSub) {
+      return {
+        customerId: customer.id,
+        subscriptionId: activeSub.id,
+      };
+    }
+    if (!fallbackSubscriptionId && subs.data[0]) {
+      fallbackCustomerId = customer.id;
+      fallbackSubscriptionId = subs.data[0].id;
+    }
+  }
+
+  if (storedCustomerId) {
+    try {
+      const subs = await stripe.subscriptions.list({ customer: storedCustomerId, status: 'all', limit: 10 });
+      const activeSub = subs.data.find(sub => ACTIVE_SUBSCRIPTION_STATUSES.has(sub.status));
+      return {
+        customerId: storedCustomerId,
+        subscriptionId: activeSub?.id || subs.data[0]?.id || fallbackSubscriptionId,
+      };
+    } catch (error: any) {
+      console.log('[billing/portal] Stored customer lookup failed', {
+        email,
+        customerId: storedCustomerId,
+        error: error?.message,
+      });
+    }
+  }
+
+  return {
+    customerId: fallbackCustomerId,
+    subscriptionId: fallbackSubscriptionId,
+  };
+}
 
 export async function POST(req: Request) {
   const stripe = getStripeServerClient();
@@ -28,44 +90,39 @@ export async function POST(req: Request) {
     // 1. Look up license row
     const { data: license } = await supabaseAdmin
       .from('licenses')
-      .select('stripe_customer_id')
+      .select('stripe_customer_id, stripe_subscription_id, plan, is_active')
       .eq('email', cleanEmail)
       .single();
 
-    let customerId = license?.stripe_customer_id || null;
-
-    // 2. If no customer ID stored (Payment Link flow), search Stripe by email
-    if (!customerId) {
-      const customers = await stripe.customers.list({ email: cleanEmail, limit: 5 });
-      // Pick the customer with an active subscription if multiple exist
-      for (const c of customers.data) {
-        const subs = await stripe.subscriptions.list({ customer: c.id, status: 'all', limit: 1 });
-        if (subs.data.length > 0) {
-          customerId = c.id;
-          // Backfill stripe_customer_id so future lookups are instant
-          await supabaseAdmin
-            .from('licenses')
-            .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
-            .eq('email', cleanEmail);
-          break;
-        }
-      }
-      // If still nothing, just use first customer found
-      if (!customerId && customers.data.length > 0) {
-        customerId = customers.data[0].id;
-        await supabaseAdmin
-          .from('licenses')
-          .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
-          .eq('email', cleanEmail);
-      }
-    }
+    const portalTarget = await findCustomerForPortal(
+      stripe,
+      cleanEmail,
+      license?.stripe_customer_id,
+      license?.stripe_subscription_id,
+    );
+    const customerId = portalTarget.customerId;
 
     if (!customerId) {
+      const proWithoutStripe = !!license?.is_active || ['pro', 'lifetime'].includes(String(license?.plan || '').toLowerCase());
       return NextResponse.json(
-        { error: 'No Stripe account found for this email. Have you subscribed yet?' },
+        {
+          error: proWithoutStripe
+            ? 'This Pro license is active, but no Stripe billing account is linked to it.'
+            : 'No Stripe account found for this email. Have you subscribed yet?',
+          code: proWithoutStripe ? 'PRO_WITHOUT_STRIPE_BILLING' : 'NO_STRIPE_CUSTOMER',
+        },
         { status: 404 }
       );
     }
+
+    await supabaseAdmin
+      .from('licenses')
+      .update({
+        stripe_customer_id: customerId,
+        stripe_subscription_id: portalTarget.subscriptionId || license?.stripe_subscription_id || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('email', cleanEmail);
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,

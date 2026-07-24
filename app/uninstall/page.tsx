@@ -9,6 +9,7 @@ const REASONS = [
   { id: 'too-slow',      label: "It slowed down my browser" },
   { id: 'privacy',       label: "I had privacy concerns" },
   { id: 'better-alt',    label: "I found a better alternative" },
+  { id: 'pro-expensive', label: "I want PRO functions, but Tab Monitor PRO is too expensive" },
   { id: 'temporary',     label: "Just uninstalling temporarily" },
   { id: 'bugs',          label: "Too many bugs or errors" },
   { id: 'other',         label: "Other reason" },
@@ -60,18 +61,12 @@ function UninstallPage() {
   const trimmedDetail = detail.trim();
   const trimmedEmail = email.trim();
   const isEmailValid = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail), [trimmedEmail]);
-  const isDetailValid = trimmedDetail.length >= 20;
 
   async function handleSubmit() {
     if (!selected) return;
 
     if (!isEmailValid) {
       setError('Please enter a valid email before submitting.');
-      return;
-    }
-
-    if (!isDetailValid) {
-      setError('Please share at least 20 characters of feedback before submitting.');
       return;
     }
 
@@ -638,14 +633,14 @@ function UninstallPage() {
                 <label className="detail-label">What went wrong?</label>
                 <textarea
                   className="detail-field"
-                  placeholder="Please share at least 20 characters so we understand what happened."
+                  placeholder="Optional: tell us what happened."
                   value={detail}
                   onChange={e => { setDetail(e.target.value); if (error) setError(''); }}
                   maxLength={400}
                   rows={3}
                 />
-                <div className={`field-help ${trimmedDetail.length > 0 && !isDetailValid ? 'error' : ''}`}>
-                  {trimmedDetail.length}/20 characters minimum.
+                <div className="field-help">
+                  Optional feedback. {trimmedDetail.length}/400 characters.
                 </div>
 
                 {/* Plans section */}
@@ -675,7 +670,7 @@ function UninstallPage() {
 
             <button
               className="btn-submit"
-              disabled={!selected || submitting || !isEmailValid || !isDetailValid}
+              disabled={!selected || submitting || !isEmailValid}
               onClick={handleSubmit}
             >
               {submitting

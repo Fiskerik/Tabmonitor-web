@@ -27,10 +27,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'A valid email is required.' }, { status: 400 });
     }
 
-    if (normalizedDetails.length < 20) {
-      return NextResponse.json({ error: 'Please provide at least 20 characters of feedback.' }, { status: 400 });
-    }
-
     const { error } = await supabaseAdmin
       .from('uninstall_feedback')
       .insert([
